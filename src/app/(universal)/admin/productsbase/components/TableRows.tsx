@@ -80,7 +80,7 @@ function TableRows({ product }: { product: ProductType }) {
 
       <TableCell>{price}</TableCell>
       <TableCell>{discountedPrice}</TableCell>
- <TableCell>{product.qty}</TableCell>
+ <TableCell>{product.stockQty}</TableCell>
       <TableCell>
         <span
           className={`text-xs px-2 py-1 rounded-full capitalize font-semibold ${

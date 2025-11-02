@@ -15,14 +15,7 @@ import { deleteImage, upload } from "@/lib/cloudinary";
 // import { Weight } from "lucide-react";
 // import { revalidatePath } from "next/cache";
 
-import {
-  addDoc,
-  collection,
 
-  getDocs,
- 
-
-} from "@firebase/firestore"; //doc, getDoc,
 
 
 
@@ -78,7 +71,7 @@ export async function addNewProduct1(formData: FormData) {
 }
 
 export async function deleteProduct(id: string, oldImageUrl: string) {
-console.log("this---------------",id)
+
   const docRef = adminDb.collection("products").doc(id);
 
   try {
@@ -239,7 +232,85 @@ export async function uploadImage(formData: FormData) {
 }
 
 
+
 export async function addNewProduct(formData: FormData) {
+  const featured_img = formData.get("isFeatured") === "true";
+  const name = formData.get("name") as string;
+  const price = formData.get("price") as string;
+  const discountPrice = formData.get("discountPrice") as string;
+  const sortOrder = formData.get("sortOrder") as string;
+  const categoryId = formData.get("categoryId") as string;
+  const productDesc = formData.get("productDesc") as string;
+  const image = formData.get("image");
+  const status = formData.get("status") as "published" | "draft" | "out_of_stock";
+  const stockQtyRaw = formData.get("stockQty") as string;
+
+  // ✅ Parse numeric fields
+  const stockQty = parseInt(stockQtyRaw || "0", 10);
+  const priceF = parseFloat(price.replace(/,/g, "."));
+  const discountPriceF = parseFloat(discountPrice.replace(/,/g, "."));
+  const sortOrderN = parseInt(sortOrder || "0", 10);
+
+  const receivedData = {
+    name,
+    price: priceF,
+    discountPrice: discountPriceF,
+    sortOrder: sortOrderN,
+    categoryId,
+    productDesc,
+    image,
+    isFeatured: featured_img,
+    status,
+  };
+
+  // ✅ Validate data
+  const result = newPorductSchema.safeParse(receivedData);
+  if (!result.success) {
+    const zodErrors: Record<string, string> = {};
+    result.error.issues.forEach((issue) => {
+      zodErrors[issue.path[0]] = issue.message;
+    });
+    return { errors: zodErrors };
+  }
+
+  // ✅ Upload image (if needed)
+  let imageUrl = "/com.jpg";
+  if (image && image !== "0") {
+    try {
+      imageUrl = await upload(image);
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      return { errors: { image: "Image upload failed" } };
+    }
+  }
+
+  const data = {
+    name,
+    price: priceF,
+    discountPrice: discountPriceF,
+    stockQty, // ✅ stock included
+    flavors: false,
+    sortOrder: sortOrderN,
+    categoryId,
+    productDesc,
+    image: imageUrl,
+    isFeatured: featured_img,
+    status,
+  };
+
+  try {
+    const docRef = await adminDb.collection("products").add(data);
+    console.log("✅ Product added with ID:", docRef.id);
+    return { success: true, message: "Product saved successfully", id: docRef.id };
+  } catch (error) {
+    console.error("❌ Firestore add failed:", error);
+    return { errors: { general: "Could not save product" } };
+  }
+}
+
+
+const stockQtyS = "4";
+export async function addNewProduct_oldworking(formData: FormData) {
   console.log("formdata-----", formData);
 
   const featured_img = formData.get("isFeatured") === "ture";
@@ -304,6 +375,7 @@ export async function addNewProduct(formData: FormData) {
     name,
     price: priceF,
     discountPrice: discountPriceValueF,
+    stockQty:stockQtyS,
     flavors: false,
     sortOrder: sortOrderN,
     categoryId,
@@ -361,7 +433,7 @@ export async function editProduct(formData: FormData) {
   const name = formData.get("name");
   const priceRaw = formData.get("price") as string;
   const discountPriceRaw = formData.get("discountPrice") as string;
-  const qtyS = formData.get("qty") as string;
+  const stockQtyS = formData.get("stockQty") as string;
   const sortOrderRaw = formData.get("sortOrder") as string;
   const categoryId = formData.get("categoryId");
   const productDesc = formData.get("productDesc");
@@ -375,7 +447,7 @@ export async function editProduct(formData: FormData) {
     name,
     price: priceRaw,
     discountPrice: discountPriceRaw,
-    qty:qtyS,
+    stockQty:stockQtyS,
     sortOrder: sortOrderRaw,
     categoryId,
     productDesc,
@@ -438,7 +510,7 @@ export async function editProduct(formData: FormData) {
     name,
     price,
     discountPrice,
-    qty: Number(qtyS),
+    stockQty: Number(stockQtyS),
     flavors: false,
     sortOrder,
     categoryId,
@@ -551,6 +623,7 @@ export async function uploadProductFromCSV(data: Partial<ProductType>) {
     price: Number(data.price),
     discountPrice:
       data.discountPrice !== undefined ? Number(data.discountPrice) : 0,
+    stockQty: data.stockQty ?? 0,
     categoryId: data.categoryId ?? "",
     productCat: data.productCat ?? "",
     baseProductId: data.baseProductId ?? "",

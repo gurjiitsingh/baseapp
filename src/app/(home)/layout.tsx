@@ -78,7 +78,7 @@ export default function RootLayout({
               <Footer />
 
               <div className="fixed bottom-8 right-4 z-50 w-fit">
-                {/* <CartBottom /> */}
+                <CartBottom />
               </div>
             </div>
           </Providers>

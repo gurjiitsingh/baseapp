@@ -24,6 +24,7 @@ export type ProductType = {
   id: string | undefined;
   name: string;
   price: number;
+  stockQty:number;
   discountPrice: number | undefined;
   categoryId:string;
      productCat:string | undefined;
@@ -66,7 +67,7 @@ const productSchema = z.object({
     .string()
     .refine((value) => /^\d+$/.test(value), "Invalid product price"), // Refinement
         discountPrice:z.string().optional(),
-    qty:z.string().optional(),
+    stockQty:z.string().optional(),
   sortOrder: z.string().min(1, { message: "Please select category" }),
 
   productDesc: z.string().min(1, { message: "Please select category" }),
@@ -96,7 +97,7 @@ export const newPorductSchema = z.object({
     .refine((value) => /[.,\d]+/.test(value), "Invalid product price"),
     discountPrice:z.string().optional().default("0"),  
      
-    qty:z.string().optional(),
+    stockQty:z.string().optional(),
   //categoryId: z.string().min(1, { message: "Please select category" }),
   categoryId:z.string().optional(),
   sortOrder: z.string().min(1, { message: "Please add sort order" }),
@@ -143,7 +144,7 @@ export const editPorductSchema = z.object({
     //.refine((value) => /^\d+$/.test(value), "Invalid product price"), // Refinement
     .refine((value) => /^\d*[.,]?\d*$/.test(value), "Invalid product price"), // Refinement
     discountPrice:z.string().optional(),
-    qty:z.string().optional(),
+    stockQty:z.string().optional(),
   //  ^\d*[.,]?\d*$
   // price: z
   //   .string()

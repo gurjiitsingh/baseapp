@@ -37,6 +37,7 @@ const EditProduct = () => {
    
     async function prefetch() {
       const data = await fetchProductById(id);
+     
 
       if (!data) return; // exit early if null
 
@@ -55,7 +56,7 @@ const EditProduct = () => {
       setValue("productDesc", data.productDesc);
       setValue("oldImgageUrl", data.image);
       setValue("price", priceS);
-       setValue("qty", data.qty!.toString());
+      setValue("stockQty", data?.stockQty ? data.stockQty.toString() : "-1");
       setValue("discountPrice", discountPriceS ?? "0,00");
       setValue("status", data.status ?? "published");
 
@@ -97,7 +98,7 @@ const EditProduct = () => {
     formData.append("name", data.name);
     formData.append("price", data.price);
     formData.append("discountPrice", data.discountPrice! ?? "0.00");
-      formData.append("qty", data.qty! ?? "-1");
+      formData.append("stockQty", data.stockQty! ?? "-1");
     formData.append("categoryId", data.categoryId!);
     formData.append("sortOrder", data.sortOrder);
     formData.append("productDesc", data.productDesc!);
@@ -254,13 +255,13 @@ const EditProduct = () => {
                       Quantity<span className="text-red-500"></span>{" "}
                     </label>
                     <input
-                      {...register("qty")}
+                      {...register("stockQty")}
                       className="input-style"
                       placeholder="Enter Price"
                     />
                     <span className="text-[0.8rem] font-medium text-destructive">
-                      {errors.qty?.message && (
-                        <span>{errors.qty?.message}</span>
+                      {errors.stockQty?.message && (
+                        <span>{errors.stockQty?.message}</span>
                       )}
                     </span>
                   </div>
