@@ -24,6 +24,18 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
 });
 
+import { Poppins } from "next/font/google";
+import { Cinzel, Lato, Roboto, Poppins } from "next/font/google";
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const lato = Lato({
+  subsets: ["latin"],
+  weight: ["400", "700"], 
+});
+
 // ✅ Dynamic SEO fallback logic here
 //export const metadata: Metadata = getSeoMetadata();
 
@@ -56,7 +68,8 @@ export default function RootLayout({
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap" rel="stylesheet"></link>
       </head>
-      <body className={`${playfair.variable} font-playfair bg-[#EFEDE5] text-[#2B2E4A]`}>
+      {/* <body className={`${playfair.variable} font-playfair bg-[#EFEDE5] text-[#2B2E4A]`}> */}
+      <body className={`${lato.className} bg-[#fff8f4] text-[#2b2b2b]`}>
         <div className=" bg-[#EFEDE5] text-[#2B2E4A]">
         <div translate="no">
           <UTMInitializer />
@@ -72,10 +85,10 @@ export default function RootLayout({
               {/* <div className="container mx-auto top-0 px-2 md:px-0 inset-0 z-50"> */}
               <Header />
               {/* </div> */}
-              <LogoCircle />
+              {/* <LogoCircle /> */}
               {children}
 
-              <Footer />
+              <Footer />?
 
               <div className="fixed bottom-8 right-4 z-50 w-fit">
                 <CartBottom />

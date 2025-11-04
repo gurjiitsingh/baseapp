@@ -88,40 +88,126 @@ const productSchema = z.object({
 });
 export type TproductSchema = z.infer<typeof productSchema>;
 
+// export const newPorductSchema = z.object({
+//   id: z.string().optional(),
+
+//   name: z.string().min(4, { message: "Product name is required" }),
+
+//   price: z
+//     .union([z.string(), z.number()])
+//     .transform((val) => Number(val))
+//     .refine((val) => !isNaN(val) && val >= 0, {
+//       message: "Invalid product price",
+//     }),
+
+// discountPrice: z
+//     .union([z.string(), z.number()])
+//     .optional()
+//     .transform((val) =>
+//       val === undefined || val === "" ? undefined : Number(val)
+//     )
+//     .refine(
+//       (val) => val === undefined || (!isNaN(val) && val >= 0),
+//       { message: "Invalid discount price" }
+//     ),
+
+//   stockQty: z
+//     .union([z.string(), z.number()])
+//     .optional()
+//     .transform((val) =>
+//       val === undefined || val === "" ? undefined : Number(val)
+//     )
+//     .refine((val) => val === undefined || !isNaN(val), {
+//       message: "Invalid stock quantity",
+//     }),
+
+//   categoryId: z.string().optional(),
+
+//   sortOrder: z
+//     .union([z.string(), z.number()])
+//     .transform((val) => Number(val))
+//     .refine((val) => !isNaN(val), { message: "Invalid sort order" }),
+
+//   productDesc: z.string().optional(),
+
+//   isFeatured: z.boolean().optional(),
+
+//   image: z.any().optional(),
+
+//   baseProductId: z.string().optional(),
+
+//   flavors: z.boolean().optional(),
+
+//   status: z
+//     .enum(["published", "draft", "out_of_stock"])
+//     .optional()
+//     .nullable(),
+// });
+
+
 export const newPorductSchema = z.object({
   id: z.string().optional(),
+
+  // ✅ Mandatory
   name: z.string().min(4, { message: "Product name is required" }),
-  price: z
+
+  // price: z
+  //   .string()
+  //   .refine((val) => /[.,\d]+/.test(val), { message: "Invalid product price" }),
+
+  // sortOrder: z
+  //   .string()
+  //   .min(1, { message: "Please add sort order" }),
+
+price: z
+  .union([z.string(), z.number()])
+  .refine((val) => {
+    const num = typeof val === "string" ? parseFloat(val.replace(",", ".")) : val;
+    return !isNaN(num) && num >= 0;
+  }, { message: "Invalid product price" }),
+
+sortOrder: z.union([z.string(), z.number()]).refine((val) => {
+  const num = typeof val === "string" ? parseInt(val) : val;
+  return !isNaN(num);
+}, { message: "Invalid sort order" }),
+
+  categoryId: z
     .string()
-    // .refine((value) => /^\d+$/.test(value), "Invalid product price"), // Refinement
-    .refine((value) => /[.,\d]+/.test(value), "Invalid product price"),
-    discountPrice:z.string().optional().default("0"),  
-     
-    stockQty:z.string().optional(),
-  //categoryId: z.string().min(1, { message: "Please select category" }),
-  categoryId:z.string().optional(),
-  sortOrder: z.string().min(1, { message: "Please add sort order" }),
-  productDesc: z
-    .string().optional(),
-   // .min(2, { message: "Product productDescription is required" }),
-  //  brand: z.string().min(1, { message: "Please select category" }),
-  //  dimensions:z.string().optional(),
-  //weight:z.string().optional(),
+    .min(1, { message: "Please select category" }),
+
+  status: z.enum(["published", "draft", "out_of_stock"]),
+
+  // ✅ Optional fields
+  discountPrice: z
+    .union([z.string(), z.number()])
+    .optional()
+    .transform((val) =>
+      val === undefined || val === "" ? undefined : Number(val)
+    )
+    .refine(
+      (val) => val === undefined || (!isNaN(val) && val >= 0),
+      { message: "Invalid discount price" }
+    ),
+
+  stockQty: z
+    .union([z.string(), z.number()])
+    .optional()
+    .transform((val) =>
+      val === undefined || val === "" ? undefined : Number(val)
+    )
+    .refine((val) => val === undefined || !isNaN(val), {
+      message: "Invalid stock quantity",
+    }),
+
+  productDesc: z.string().optional(),
+
   isFeatured: z.boolean().optional(),
 
-  // image: z.any().refine((file: File) => file?.length !== 0, "File is required"),
   image: z.any().optional(),
+
   baseProductId: z.string().optional(),
+
   flavors: z.boolean().optional(),
-    status: z
-    .enum(['published', 'draft', 'out_of_stock'])
-    .optional()
-    .nullable(),
-  // .refine((file) => file.size < MAX_FILE_SIZE, "Max size is 5MB.")
-  // .refine(
-  //   (file) => checkFileType(file),
-  //   "Only .jpg, .jpeg formats are supported."
-  // ),
 });
 
 export type TnewProductSchema = z.infer<typeof newPorductSchema>;

@@ -3,7 +3,7 @@
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-
+import HeroImage from "@/components/HeroImageClassic";
 import { useEffect } from "react";
 import FlyerBuffet from "@/components/FlyerBuffet";
 import FlavorLine from "@/components/FlavorLine";
@@ -11,12 +11,6 @@ import SpecialRecommendations from "@/components/SpecialRecommendations";
 import ContactInfo from "@/components/ContactInfo";
 import QuoteBanner from "@/components/QuoteBanner";
 import Catering from "@/components/Catering";
-import BestOfMonth from "@/components/level-1/BestOfMonth";
-import SlidersByCatId from "@/components/level-1/SlidersByCatId";
-import HeroSection from "@/components/HeroImage";
-import DiscountSection from "@/custom/cus-components/DiscountSection";
-import WelcomeBanner from "@/custom/cus-components/WelcomeBanner";
-import HeroSectionCustom from "@/custom/cus-components/HeroSectionCustom";
 
 // import MenuPreview from "@/components/MenuPreview";
 // import Contact from "@/components/Contact";
@@ -30,14 +24,8 @@ export default function Page() {
 
   return (
     <main className=" text-gray-900 font-sans">
-      {/* <FlavorLine /> */}
-      {/* <HeroSection /> */}
-      <HeroSectionCustom />
-      <DiscountSection />
-      <WelcomeBanner />
-     <BestOfMonth />
-          <SlidersByCatId />
-
+      <FlavorLine />
+      <HeroImage />
       <SpecialRecommendations />
       {/* <About /> */}
       {/* <MasalaFlyer /> */}

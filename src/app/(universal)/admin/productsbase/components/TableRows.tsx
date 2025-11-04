@@ -1,38 +1,37 @@
 "use client";
 
-import {
-  TableCell,
-  TableRow,
-} from "@/components/ui/table";
+import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { MdDeleteForever } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 import Image from "next/image";
 import Link from "next/link";
-import { deleteProduct } from "@/app/(universal)/action/products/dbOperation";
+import { deleteProduct, toggleFeatured } from "@/app/(universal)/action/products/dbOperation";
 import { ProductType } from "@/lib/types/productType";
-import { formatCurrencyNumber } from '@/utils/formatCurrency';
+import { formatCurrencyNumber } from "@/utils/formatCurrency";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
-import { useLanguage } from '@/store/LanguageContext';
+import { useLanguage } from "@/store/LanguageContext";
+import { useState } from "react";
 
 function TableRows({ product }: { product: ProductType }) {
   const { settings } = UseSiteContext();
   const { TEXT } = useLanguage();
-  
+  const [isFeatured, setIsFeatured] = useState(product.isFeatured);
+
   const price = formatCurrencyNumber(
     Number(product.price) ?? 0,
-    (settings.currency || 'EUR') as string,
-    (settings.locale || 'de-DE') as string
+    settings.currency as string,
+    settings.locale as string
   );
 
-  let discountedPrice = "";
-  if (product.discountPrice !== undefined) {
-    discountedPrice = formatCurrencyNumber(
-      Number(product.discountPrice) ?? 0,
-      (settings.currency || 'EUR') as string,
-      (settings.locale || 'de-DE') as string
-    );
-  }
+  const discountedPrice =
+    product.discountPrice !== undefined
+      ? formatCurrencyNumber(
+          Number(product.discountPrice) ?? 0,
+          settings.currency as string,
+          settings.locale as string
+        )
+      : "";
 
   const statusLabel = product.status ?? "draft";
   const statusStyles = {
@@ -42,7 +41,8 @@ function TableRows({ product }: { product: ProductType }) {
   };
 
   async function handleDelete(product: ProductType) {
-    const confirmDelete = confirm(TEXT.confirm_delete_product || "Do you want to delete the product?");
+    const confirmDelete =
+      confirm(TEXT.confirm_delete_product || "Do you want to delete the product?");
     if (!confirmDelete) return;
 
     try {
@@ -58,8 +58,27 @@ function TableRows({ product }: { product: ProductType }) {
     }
   }
 
+  async function handleFeatureToggle() {
+    try {
+      const newStatus = !isFeatured;
+      setIsFeatured(newStatus);
+      const result = await toggleFeatured(product.id!, newStatus);
+
+      if (!result.success) {
+        alert("Failed to update featured status");
+        setIsFeatured(!newStatus); // revert if failed
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error updating featured status");
+    }
+  }
+
   return (
-    <TableRow key={product.id} className="whitespace-nowrap hover:bg-green-50 dark:hover:bg-zinc-800 transition rounded-xl">
+    <TableRow
+      key={product.id}
+      className="whitespace-nowrap hover:bg-green-50 dark:hover:bg-zinc-800 transition rounded-xl"
+    >
       <TableCell>
         <div className="px-3 py-1 text-center min-w-[100px]">
           {product.image && (
@@ -77,14 +96,16 @@ function TableRows({ product }: { product: ProductType }) {
       <TableCell className="whitespace-normal break-words max-w-[180px]">
         {product.sortOrder}.&nbsp;{product.name}
       </TableCell>
-
+  <TableCell>{product.productCat}</TableCell>
       <TableCell>{price}</TableCell>
       <TableCell>{discountedPrice}</TableCell>
- <TableCell>{product.stockQty}</TableCell>
+      <TableCell>{product.stockQty}</TableCell>
+
       <TableCell>
         <span
           className={`text-xs px-2 py-1 rounded-full capitalize font-semibold ${
-            statusStyles[statusLabel as keyof typeof statusStyles] || "bg-gray-100 text-gray-700"
+            statusStyles[statusLabel as keyof typeof statusStyles] ||
+            "bg-gray-100 text-gray-700"
           }`}
         >
           {statusLabel.replace(/_/g, " ")}
@@ -96,7 +117,7 @@ function TableRows({ product }: { product: ProductType }) {
       </TableCell>
 
       <TableCell>
-        {product?.isFeatured === true && (
+        {isFeatured && (
           <span className="ml-2 bg-gradient-to-tr from-blue-500 to-indigo-400 text-white text-[10px] rounded-full px-3 py-1">
             {TEXT.status_featured || "Featured"}
           </span>
@@ -104,7 +125,21 @@ function TableRows({ product }: { product: ProductType }) {
       </TableCell>
 
       <TableCell>
-        <div className="flex gap-3">
+        <div className="flex gap-2">
+          {/* ✅ Toggle Featured Button */}
+          <Button
+            onClick={handleFeatureToggle}
+            size="sm"
+            className={`${
+              isFeatured
+                ? "bg-blue-500 hover:bg-blue-600"
+                : "bg-gray-300 hover:bg-gray-400"
+            } text-white px-2 py-0`}
+          >
+            {isFeatured ? "Unfeature" : "Feature"}
+          </Button>
+
+          {/* Edit Button */}
           <Link
             href={{
               pathname: "/admin/productsbase/editform",
@@ -116,6 +151,7 @@ function TableRows({ product }: { product: ProductType }) {
             </Button>
           </Link>
 
+          {/* Variants Button */}
           <Link
             href={{
               pathname: "/admin/productsaddon",
@@ -127,6 +163,7 @@ function TableRows({ product }: { product: ProductType }) {
             </Button>
           </Link>
 
+          {/* Delete Button */}
           <Button
             onClick={() => handleDelete(product)}
             size="sm"

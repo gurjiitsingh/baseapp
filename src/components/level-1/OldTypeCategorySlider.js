@@ -25,7 +25,7 @@ const lato = Lato({
   weight: ["400", "700"],
 });
 
-export default function CategorySliderSm2() {
+export default function OldTypeCategorySlider() {
   const [width, setWidth] = useState(0); // Start with 0, safe for SSR
   // const [width, setWidth] = useState(() =>
   //   typeof window !== "undefined" ? window.innerWidth : 300

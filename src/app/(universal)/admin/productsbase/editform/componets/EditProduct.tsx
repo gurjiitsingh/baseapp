@@ -87,14 +87,7 @@ const EditProduct = () => {
 
   async function onsubmit(data: TeditProductSchema) {
     const formData = new FormData();
-    //console.log("---------",formData);
-    // let CatId;
-    // if(data.categoryId === "0"){
-    //  CatId = data.categoryIdOld as string;
-    // }else{
-    //  CatId = data.categoryId as string;
-    // }
-
+ 
     formData.append("name", data.name);
     formData.append("price", data.price);
     formData.append("discountPrice", data.discountPrice! ?? "0.00");
@@ -116,45 +109,8 @@ const EditProduct = () => {
       alert("Some thing went wrong");
     }
 
-    // if (result.errors) {
-    //   // not network error but data validation error
-    //   const errors:Terror = result.errors;
-
-    //   if (errors.name) {
-    //     setError("name", {
-    //       type: "server",
-    //       message: errors.name,
-    //     });
-    //   } else if (errors.price) {
-    //     setError("price", {
-    //       type: "server",
-    //       message: errors.price,
-    //     });
-    //   } else if (errors.productCat) {
-    //     setError("productCat", {
-    //       type: "server",
-    //       message: errors.productCat,
-    //     });
-    //   }
-    //   if (errors.productDesc) {
-    //     setError("productDesc", {
-    //       type: "server",
-    //       message: errors.productDesc,
-    //     });
-    //   }
-    //   if (errors.image) {
-    //     setError("image", {
-    //       type: "server",
-    //       message: errors.image,
-    //     });
-    //   }
-
-    //    else {
-    //   //  alert("Something went wrong");
-    //   }
-    // }
-
-    // console.log(result);
+    
+     console.log(data);
   }
   //   function setSelectedIndex(s, i){
   // s.options[i-1].selected = true;
@@ -171,7 +127,7 @@ const EditProduct = () => {
           <div className="flex flex-col lg:flex-row gap-5 ">
             {/* left box */}
             <div className="flex-1 flex flex-col gap-y-2">
-              <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border">
+              <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border-0">
                 <h1 className="font-semibold">Product</h1>
                 <div className="flex w-full flex-col gap-2  my-2 ">
                   <input {...register("id")} hidden />
@@ -215,40 +171,24 @@ const EditProduct = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border">
+              <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border-0">
                 <h1 className="font-semibold">Price Details</h1>
                 <div className="flex w-full flex-col gap-2  my-2 ">
-                  <div className="flex flex-col gap-1 w-full">
-                    <label className="label-style" htmlFor="product-title">
-                      Regurlar Price<span className="text-red-500">*</span>{" "}
-                    </label>
-                    <input
-                      {...register("price")}
-                      className="input-style"
-                      placeholder="Enter Title"
-                    />
-                    <span className="text-[0.8rem] font-medium text-destructive">
-                      {errors.price?.message && (
-                        <span>{errors.price?.message}</span>
-                      )}
-                    </span>
-                  </div>
+                  {/* Price Fields */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label className="label-style">Regular Price</label>
+                  <input {...register("price")} className="input-style" placeholder="Enter Price" />
+                  <p className="text-[0.8rem] text-destructive">{errors.price?.message}</p>
+                </div>
+                <div>
+                  <label className="label-style">Discount Price</label>
+                  <input {...register("discountPrice")} className="input-style" placeholder="Enter Discount Price" />
+                  <p className="text-[0.8rem] text-destructive">{errors.discountPrice?.message}</p>
+                </div>
+              </div>
 
-                  <div className="flex flex-col gap-1 w-full">
-                    <label className="label-style" htmlFor="product-title">
-                      Discount Price<span className="text-red-500"></span>{" "}
-                    </label>
-                    <input
-                      {...register("discountPrice")}
-                      className="input-style"
-                      placeholder="Enter Price"
-                    />
-                    <span className="text-[0.8rem] font-medium text-destructive">
-                      {errors.discountPrice?.message && (
-                        <span>{errors.discountPrice?.message}</span>
-                      )}
-                    </span>
-                  </div>
+            
 
                   <div className="flex flex-col gap-1 w-full">
                     <label className="label-style" htmlFor="product-title">
@@ -271,7 +211,7 @@ const EditProduct = () => {
             {/* End of left box */}
             <input {...register("oldImgageUrl")} hidden />
             <div className="flex-1 flex flex-col gap-5 h-full">
-              <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border">
+              <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border-0">
                 <h1 className="font-semibold">Pictures</h1>
                 <div className="flex flex-col gap-1">
                   <label className="label-style">Product Image</label>
@@ -287,7 +227,7 @@ const EditProduct = () => {
                 </div>
               </div>
 
-              <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border">
+              <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border-0">
                 <h1 className="font-semibold">General Detail</h1>
 
                 <div className="flex flex-col gap-1">

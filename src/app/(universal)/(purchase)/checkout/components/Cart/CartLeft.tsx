@@ -87,8 +87,8 @@ export default function CartLeft() {
 
     const roundedTotalCU = formatCurrencyNumber(
       roundedTotal ?? 0,
-      (settings.currency || "EUR") as string,
-      (settings.locale || "de-DE") as string
+      (settings.currency ) as string,
+      (settings.locale ) as string
     );
 
     //setitemTotalComa(roundedTotal.toFixed(2).replace(".", ","));
@@ -215,8 +215,8 @@ export default function CartLeft() {
 
     const netPayCU = formatCurrencyNumber(
       Number(netPay) ?? 0,
-      (settings.currency || "EUR") as string,
-      (settings.locale || "de-DE") as string
+      (settings.currency) as string,
+      (settings.locale ) as string
     );
 
     setEndTotalComma(netPayCU);
@@ -250,6 +250,8 @@ export default function CartLeft() {
       setdeliveryCostL(0);
     }
   }, [deliveryType, deliveryDis?.minSpend, itemTotal, deliveryDis?.price]);
+
+  
 
   async function proceedToOrder() {
     setIsLoading(true);

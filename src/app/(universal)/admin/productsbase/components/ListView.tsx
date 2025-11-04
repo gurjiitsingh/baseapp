@@ -120,6 +120,7 @@ useEffect(() => {
             <TableRow>
               <TableHead className="hidden md:table-cell">Image</TableHead>
               <TableHead className="hidden md:table-cell">Name</TableHead>
+                <TableHead className="hidden md:table-cell">Category</TableHead>
               <TableHead className="hidden md:table-cell">Price</TableHead>
               <TableHead className="hidden md:table-cell">Discount Price</TableHead>
                <TableHead className="hidden md:table-cell">Quantity</TableHead>

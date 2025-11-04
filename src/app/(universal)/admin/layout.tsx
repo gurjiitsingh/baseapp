@@ -35,7 +35,7 @@ export default function RootLayout({
               <div className="lg:hidden">
                 <Header />
               </div>
-              <div className="w-full flex flex-col px-5 pt-17  bg-slate-100 h-screen ">
+              <div className="w-full flex flex-col px-5 pt-17  bg-[#fafafa] h-screen ">
              <LanguageProvider>
                 {children}
                 </LanguageProvider>

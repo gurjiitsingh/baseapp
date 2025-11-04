@@ -38,11 +38,18 @@ export default function ProdcutCardHorizontical({
   //common code start
 
   //const priceRegular = product.price?.toString().replace (/\./g, ",") ?? "0,00";
+  // const priceRegular = formatCurrencyNumber(
+  //   product.price ?? 0,
+  //   (settings.currency || "EUR") as string,
+  //   (settings.locale || "de-DE") as string
+  // );
+
   const priceRegular = formatCurrencyNumber(
-    product.price ?? 0,
-    (settings.currency || "EUR") as string,
-    (settings.locale || "de-DE") as string
-  );
+  product.price ?? 0,       // numeric value
+  "GBP",                    // UK currency
+  "en-GB"                   // English (United Kingdom) locale
+);
+console.log("settings.currency---------------",settings.currency)
   let priceDiscounted;
   let priceTarget = product.price ?? 0;
   if (product.discountPrice && product.discountPrice > 0) {
@@ -50,8 +57,8 @@ export default function ProdcutCardHorizontical({
     // priceDiscounted = product.discountPrice.toString().replace (/\./g, ",");
     priceDiscounted = formatCurrencyNumber(
       product.discountPrice,
-      (settings.currency || "EUR") as string,
-      (settings.locale || "de-DE") as string
+      (settings.currency || "GBP") as string,
+      (settings.locale || "en-GB") as string
     );
   }
 

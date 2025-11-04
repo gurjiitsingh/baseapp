@@ -8,6 +8,10 @@ import Hero from "@/custom/cus-components/Hero";
 import Link from "next/link";
 import ProductsMenu from "@/components/level-1/ProductsMenu";
 import Products from "@/components/level-1/Products";
+import BestOfMonth from "@/components/level-1/BestOfMonth";
+import ProductCategoryList from "@/components/level-1/ProductCategoryList";
+import ProductCategorySliderList from "@/components/level-1/ProductCategorySliderList";
+import SlidersByCatId from "@/components/level-1/SlidersByCatId";
 
 //import { TnewProductSchema } from '@/lib/types';
 // import {  TnewProductSchema } from '@/lib/type/productType';
@@ -29,13 +33,16 @@ export default function Page() {
         {/* Foreground Content */}
         <div className="relative z-10">
           <div className="container mx-auto">
-            {/* <Hero /> */}
+            <Hero />
 
             {/* Order Menu Button */}
           
           </div>
 
           <CategorySliderSm2 />
+     
+          <ProductCategoryList />
+          <ProductCategorySliderList />
           <Products />
         </div>
       </div>
