@@ -64,7 +64,7 @@ const menuList: Titem[] = [
   { name: BRANDING.sidebar.reservations, link: '/admin/reservations', icon: <BsCardList /> },
   { name: BRANDING.sidebar.categories, link: '/admin/categories', icon: <MdCategory /> },
   { name: BRANDING.sidebar.pickup_discount, link: '/admin/pickupdiscount/pickup-discount', icon: <MdLocalOffer /> },
-  { name: BRANDING.sidebar.products, link: '/admin/productsbase', icon: <MdInventory /> },
+  { name: BRANDING.sidebar.products, link: '/admin/products', icon: <MdInventory /> },
   { name: BRANDING.sidebar.variants, link: '/admin/flavorsProductG', icon: <MdRestaurantMenu /> },
   { name: BRANDING.sidebar.coupon, link: '/admin/coupon', icon: <MdLocalOffer /> },
   { name: BRANDING.sidebar.delivery, link: '/admin/delivery', icon: <TbTruckDelivery /> },

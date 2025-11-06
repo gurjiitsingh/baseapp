@@ -5,7 +5,7 @@ export async function GET() {
   try {
     // Fetch only featured products, ordered by sortOrder
     const snapshot = await adminDb
-      .collection("product")
+      .collection("products")
       .where("isFeatured", "==", true)
      // .orderBy("sortOrder", "asc")
       .get();

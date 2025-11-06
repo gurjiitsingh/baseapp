@@ -480,7 +480,7 @@ export async function fetchProducts(): Promise<ProductType[]> {
           updatedAt = data.updatedAt;
         }
       }
-
+console.log("data.isFeatured--------------", data)
       return {
         id: doc.id, // Firestore ID is always a string
         name: data.name ?? "",
@@ -618,7 +618,7 @@ export async function fetchProductsForBestOfMonth(): Promise<ProductType[]> {
  */
 export async function toggleFeatured(productId: string, isFeatured: boolean) {
   try {
-    const productRef = adminDb.collection("product").doc(productId);
+    const productRef = adminDb.collection("products").doc(productId);
     await productRef.update({ isFeatured });
 
     return { success: true, message: `Product ${isFeatured ? "featured" : "unfeatured"} successfully.` };

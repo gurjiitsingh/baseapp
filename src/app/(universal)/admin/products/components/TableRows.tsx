@@ -4,6 +4,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { MdDeleteForever } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
+import { FaStar, FaRegStar } from "react-icons/fa"; // Star icons
 import Image from "next/image";
 import Link from "next/link";
 import { deleteProduct, toggleFeatured } from "@/app/(universal)/action/products/dbOperation";
@@ -17,6 +18,7 @@ function TableRows({ product }: { product: ProductType }) {
   const { settings } = UseSiteContext();
   const { TEXT } = useLanguage();
   const [isFeatured, setIsFeatured] = useState(product.isFeatured);
+  console.log("product.isFeatured-------------",product.name, product.isFeatured)
 
   const price = formatCurrencyNumber(
     Number(product.price) ?? 0,
@@ -94,9 +96,21 @@ function TableRows({ product }: { product: ProductType }) {
       </TableCell>
 
       <TableCell className="whitespace-normal break-words max-w-[180px]">
-        {product.sortOrder}.&nbsp;{product.name}
+       
+         <div className="flex items-center gap-2">
+           {product.sortOrder}.&nbsp;{product.name}
+          {/* Featured Star */}
+          <button onClick={handleFeatureToggle} className="flex items-center gap-2">
+            {isFeatured ? (
+              <FaStar size={20} className="text-amber-700" /> // Green Star if featured
+            ) : (
+              <FaRegStar size={20} className="text-gray-400" /> // Gray Star if not featured
+            )}
+          </button>
+        </div>
       </TableCell>
-  <TableCell>{product.productCat}</TableCell>
+
+      <TableCell>{product.productCat}</TableCell>
       <TableCell>{price}</TableCell>
       <TableCell>{discountedPrice}</TableCell>
       <TableCell>{product.stockQty}</TableCell>
@@ -116,29 +130,10 @@ function TableRows({ product }: { product: ProductType }) {
         {product.productDesc}
       </TableCell>
 
-      <TableCell>
-        {isFeatured && (
-          <span className="ml-2 bg-gradient-to-tr from-blue-500 to-indigo-400 text-white text-[10px] rounded-full px-3 py-1">
-            {TEXT.status_featured || "Featured"}
-          </span>
-        )}
-      </TableCell>
+      
 
       <TableCell>
         <div className="flex gap-2">
-          {/* ✅ Toggle Featured Button */}
-          <Button
-            onClick={handleFeatureToggle}
-            size="sm"
-            className={`${
-              isFeatured
-                ? "bg-blue-500 hover:bg-blue-600"
-                : "bg-gray-300 hover:bg-gray-400"
-            } text-white px-2 py-0`}
-          >
-            {isFeatured ? "Unfeature" : "Feature"}
-          </Button>
-
           {/* Edit Button */}
           <Link
             href={{

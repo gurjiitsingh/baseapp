@@ -7,7 +7,7 @@ import "@/custom/globals.css";
 
 
 import SideBarBase from "./SideBarBase";
-import { ButtonProvider } from "@/ButtonContext/ButtonProvider";
+//import { ButtonProvider } from "@/ButtonContext/ButtonProvider";
 import { LanguageProvider } from "@/store/LanguageContext";
 import { Toaster } from "react-hot-toast";
 import { Providers } from "@/app/Providers";
@@ -27,7 +27,7 @@ export default function RootLayout({
       <body>
         <Providers>
        
-        <ButtonProvider>
+        {/* <ButtonProvider> */}
           <main className="relative flex text-slate-600">
             <SideBarBase />
 
@@ -42,7 +42,7 @@ export default function RootLayout({
               </div>
             </div>
           </main>
-          </ButtonProvider>
+          {/* </ButtonProvider> */}
       
            <Toaster
             position="top-center"

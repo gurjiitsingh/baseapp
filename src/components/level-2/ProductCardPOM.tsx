@@ -38,7 +38,7 @@ export default function ProductCardPrductOfMonth({
   product: ProductType;
   
 }) {
- 
+
   const {  settings } = UseSiteContext();
  
 
