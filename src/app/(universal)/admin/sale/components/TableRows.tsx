@@ -12,7 +12,7 @@ type TableRowProps = {
   row: TRow;
 };
 
-export default function TableRow({ row }: TableRowProps) {
+export default function TableRows({ row }: TableRowProps) {
   const { settings } = UseSiteContext();
 
   const amount = formatCurrencyNumber(

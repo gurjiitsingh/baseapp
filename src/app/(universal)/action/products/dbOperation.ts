@@ -28,47 +28,7 @@ import fs from 'fs';
 import { randomUUID } from 'crypto';
 
 
-export async function addNewProduct1(formData: FormData) {
-  const featured_img = formData.get("isFeatured") === "true";
 
-  const receivedData = {
-    name: formData.get("name"),
-    price: formData.get("price"),
-    productCat: formData.get("productCat"),
-    productDesc: formData.get("productDesc"),
-    image: formData.get("image"),
-    isFeatured: featured_img,
-  };
-
-  const result = newPorductSchema.safeParse(receivedData);
-  if (!result.success) {
-    const zodErrors = Object.fromEntries(result.error.issues.map(issue => [issue.path[0], issue.message]));
-    return { errors: zodErrors };
-  }
-
-  let imageUrl;
-  try {
-    imageUrl = await upload(receivedData.image);
-  } catch (error) {
-    console.error("Image upload failed:", error);
-    return { errors: "Image could not be uploaded" };
-  }
-
-  const data = {
-    ...result.data,
-    price: formatPriceStringToNumber(result.data.price),
-    image: imageUrl,
-  };
-
-  try {
-    const docRef = await adminDb.collection("product").add(data);
-    console.log("Document written with ID:", docRef.id);
-    return { message: "Product saved" };
-  } catch (e) {
-    console.error("Error adding document:", e);
-    return { errors: "Failed to save product" };
-  }
-}
 
 export async function deleteProduct(id: string, oldImageUrl: string) {
 
@@ -98,16 +58,7 @@ export async function deleteProduct(id: string, oldImageUrl: string) {
 
 
 
-export async function fetchProductById1(id: string): Promise<ProductType> {
-  const docRef = adminDb.collection("product").doc(id);
-  const docSnap = await docRef.get();
 
-  if (!docSnap.exists) {
-    throw new Error("Product not found");
-  }
-
-  return { id: docSnap.id, ...docSnap.data() } as ProductType;
-}
 
 
 
@@ -408,8 +359,13 @@ export async function editProduct(formData: FormData) {
   const existingProduct = productSnap.data();
 
   // 🔸 Handle image
+
+
+  
+
   let imageUrl = oldImageUrl;
-  if (image && typeof image !== "string" && image !== "undefined") {
+  // if (image && typeof image !== "string" && image !== "undefined") {
+  if (image && image !== "undefined") {
     try {
       imageUrl = await upload(image);
     } catch (error) {
@@ -503,10 +459,59 @@ export async function fetchProductById(id: string): Promise<ProductType | null> 
 
 
 
-
-
-
 export async function fetchProducts(): Promise<ProductType[]> {
+  try {
+    const snapshot = await adminDb.collection("products").get();
+
+    if (snapshot.empty) {
+      console.warn("No products found in the database.");
+      return [];
+    }
+
+    const products: ProductType[] = snapshot.docs.map((doc) => {
+      const data = doc.data() as Partial<ProductType> & { updatedAt?: any };
+
+      // ✅ Normalize updatedAt (handle Firestore Timestamp or string)
+      let updatedAt: string | null = null;
+      if (data.updatedAt) {
+        if (typeof data.updatedAt.toDate === "function") {
+          updatedAt = data.updatedAt.toDate().toISOString();
+        } else if (typeof data.updatedAt === "string") {
+          updatedAt = data.updatedAt;
+        }
+      }
+
+      return {
+        id: doc.id, // Firestore ID is always a string
+        name: data.name ?? "",
+        price: data.price ?? 0,
+        stockQty: data.stockQty ?? 0,
+        discountPrice: data.discountPrice ?? 0,
+        categoryId: data.categoryId ?? "",
+        productCat: data.productCat ?? "",
+        flavors: data.flavors ?? false,
+        status: data.status ?? "draft",
+        baseProductId: data.baseProductId ?? "",
+        productDesc: data.productDesc ?? "",
+        sortOrder: data.sortOrder ?? 0,
+        image: data.image ?? "",
+        isFeatured: data.isFeatured ?? false,
+        purchaseSession: data.purchaseSession ?? null,
+        quantity: data.quantity ?? null,
+        updatedAt, // ✅ always string or null, safe for client
+      };
+    });
+
+    return products;
+  } catch (error) {
+    console.error("Failed to fetch products:", error);
+    throw new Error("Error retrieving product list");
+  }
+}
+
+
+
+export async function fetchProducts_old(): Promise<ProductType[]> {
   try {
     const snapshot = await adminDb.collection("products").get();
 

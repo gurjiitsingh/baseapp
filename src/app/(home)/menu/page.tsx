@@ -5,13 +5,10 @@
 import CategorySliderSm2 from "@/components/level-1/CategorySliderSm2";
 import { useLanguage } from "@/store/LanguageContext";
 import Hero from "@/custom/cus-components/Hero";
-import Link from "next/link";
-import ProductsMenu from "@/components/level-1/ProductsMenu";
 import Products from "@/components/level-1/Products";
-import BestOfMonth from "@/components/level-1/BestOfMonth";
 import ProductCategoryList from "@/components/level-1/ProductCategoryList";
 import ProductCategorySliderList from "@/components/level-1/ProductCategorySliderList";
-import SlidersByCatId from "@/components/level-1/SlidersByCatId";
+
 
 //import { TnewProductSchema } from '@/lib/types';
 // import {  TnewProductSchema } from '@/lib/type/productType';

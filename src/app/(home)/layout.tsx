@@ -10,26 +10,14 @@ import SafeSideCart from "./SafeSideCart";
 
 import { BargerMenu } from "@/components/Bargermenu/Menu";
 import Modal from "@/components/level-1/Modal";
-import Header from "@/components/level-1/Header";
-import Footer from "@/components/level-1/Footer";
+import Header from "@/custom/cus-components/Header";
+import Footer from "@/custom/cus-components/Footer";
 import { SEO } from "@/config/languages";
-import LogoCircle from "@/components/LogoCircle";
+import LogoCircle from "@/custom/cus-components/LogoCircle";
 
-import { Playfair_Display } from "next/font/google";
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-playfair",
-});
 
-import { Poppins } from "next/font/google";
 import { Cinzel, Lato, Roboto, Poppins } from "next/font/google";
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
 
 const lato = Lato({
   subsets: ["latin"],
@@ -69,8 +57,9 @@ export default function RootLayout({
 <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap" rel="stylesheet"></link>
       </head>
       {/* <body className={`${playfair.variable} font-playfair bg-[#EFEDE5] text-[#2B2E4A]`}> */}
-      <body className={`${lato.className} bg-[#fff8f4] text-[#2b2b2b]`}>
-        <div className=" bg-[#EFEDE5] text-[#2B2E4A]">
+      <body className={`${lato.className} bg-white text-[#2b2b2b]`}>
+        {/* bg-[#fff8f4]bg-[#EFEDE5] */}
+        <div className="  text-[#2B2E4A]">
         <div translate="no">
           <UTMInitializer />
           <Providers>

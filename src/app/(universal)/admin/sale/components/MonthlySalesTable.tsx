@@ -19,9 +19,9 @@ import {
   ResponsiveContainer,
   CartesianGrid
 } from 'recharts';
+import TableRows from './TableRows';
 
-import { UseSiteContext } from '@/SiteContext/SiteContext';
-import TableRow from './Tablerow';
+
 
 type MonthlySales = {
   month: string;
@@ -117,7 +117,7 @@ export default function MonthlySalesTable() {
             <tbody>
              
                 {monthlySales.map((row,i) => (
-              <TableRow key={i} row={row} />
+              <TableRows key={i} row={row} />
             ))}
             </tbody>
           </table>

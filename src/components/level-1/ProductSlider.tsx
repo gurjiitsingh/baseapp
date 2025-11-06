@@ -12,17 +12,10 @@ import {
   CircleHelp,
 } from "lucide-react";
 import ProductCardForSlider from "../level-2/ProductCardForSlider";
+import { ProductType } from "@/lib/types/productType";
 
 
-type ProductType = {
-  id: string;
-  name: string;
-  price: number;
-  discountPrice?: number;
-  productDesc?: string;
-  categoryId: string;
-  image?: string;
-};
+
 
 export default function ProductSlider({
   products,
@@ -43,14 +36,14 @@ export default function ProductSlider({
       {/* Scroll Buttons */}
       <button
         onClick={() => scroll("left")}
-        className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 w-10 h-10 rounded-full items-center justify-center shadow-md hover:bg-[#d24a0f] hover:text-white transition"
+        className="md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 w-10 h-10 rounded-full items-center justify-center shadow-md hover:bg-[#d24a0f] hover:text-white transition"
       >
         <ChevronLeft size={20} />
       </button>
 
       <button
         onClick={() => scroll("right")}
-        className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 w-10 h-10 rounded-full items-center justify-center shadow-md hover:bg-[#d24a0f] hover:text-white transition"
+        className=" md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 w-10 h-10 rounded-full items-center justify-center shadow-md hover:bg-[#d24a0f] hover:text-white transition"
       >
         <ChevronRight size={20} />
       </button>

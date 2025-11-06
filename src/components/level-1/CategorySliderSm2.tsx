@@ -26,7 +26,7 @@ const quicksand = Quicksand({
 
 export default function CategoryScrollSnap() {
   const [categoryData, setCategoryData] = useState<any[]>([]);
-  const { setProductCategoryIdG, setDisablePickupCatDiscountIds, settings } =
+  const { setProductCategoryIdG, setDisablePickupCatDiscountIds } =
     UseSiteContext();
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -35,7 +35,9 @@ export default function CategoryScrollSnap() {
       try {
         const categories = await fetchCategories();
         categories.sort((a, b) => Number(a.sortOrder) - Number(b.sortOrder));
-        const featured = categories.filter((c) => c.isFeatured !== "no");
+       const featured = categories.filter((c) => c.isFeatured !== false);
+
+        
         setCategoryData(featured);
 
         const disablePickupCategoryIds = categories

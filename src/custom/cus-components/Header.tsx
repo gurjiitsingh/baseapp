@@ -9,7 +9,7 @@ const FaBars = dynamic(() => import("react-icons/fa6").then((mod) => mod.FaBars)
 });
 
 import Navbar from "@/components/level-2/Navbar";
-import Login from "../buttons/Login";
+import Login from "../../components/buttons/Login";
 import { LanguageSwitcher } from "../../languages/LanguageSwitcher";
 
 const Header = () => {

@@ -5,18 +5,17 @@ import "aos/dist/aos.css";
 
 
 import { useEffect } from "react";
-import FlyerBuffet from "@/components/FlyerBuffet";
-import FlavorLine from "@/components/FlavorLine";
-import SpecialRecommendations from "@/components/SpecialRecommendations";
-import ContactInfo from "@/components/ContactInfo";
-import QuoteBanner from "@/components/QuoteBanner";
-import Catering from "@/components/Catering";
-import BestOfMonth from "@/components/level-1/BestOfMonth";
-import SlidersByCatId from "@/components/level-1/SlidersByCatId";
-import HeroSection from "@/components/HeroImage";
+import ContactInfo from "@/custom/cus-components/ContactInfo";
+import QuoteBanner from "@/custom/cus-components/QuoteBanner";
+import Catering from "@/custom/cus-components/Catering";
+import BestOfMonth from "@/custom/cus-components/BestOfMonth";
+import SlidersByCatId from "@/custom/cus-components/SlidersByCatId";
 import DiscountSection from "@/custom/cus-components/DiscountSection";
 import WelcomeBanner from "@/custom/cus-components/WelcomeBanner";
 import HeroSectionCustom from "@/custom/cus-components/HeroSectionCustom";
+import BuffetCard from "@/custom/cus-components/BuffetCard";
+import LunchDiscountCard from "@/custom/cus-components/LunchDiscountCard";
+import TableReservationCard from "@/custom/cus-components/TableReservationCard";
 
 // import MenuPreview from "@/components/MenuPreview";
 // import Contact from "@/components/Contact";
@@ -33,15 +32,25 @@ export default function Page() {
       {/* <FlavorLine /> */}
       {/* <HeroSection /> */}
       <HeroSectionCustom />
+       {/* <DiscountSectionSingle /> */}
       <DiscountSection />
       <WelcomeBanner />
      <BestOfMonth />
+     <div className="max-w-7xl flex flex-col mx-auto  md:flex-row gap-4">
+      <div className="max-w-full mx-2 md:mx-0 md:w-[60%]">
+     <LunchDiscountCard />
+     </div>
+     <div className="max-w-full mx-2 md:mx-0 md:w-[40%]">
+     <TableReservationCard />
+     </div>
+     </div>
           <SlidersByCatId />
 
-      <SpecialRecommendations />
+      {/* <SpecialRecommendations /> */}
       {/* <About /> */}
       {/* <MasalaFlyer /> */}
-      <FlyerBuffet />
+      <BuffetCard />
+      {/* <FlyerBuffet /> */}
 
       <QuoteBanner />
       <Catering />

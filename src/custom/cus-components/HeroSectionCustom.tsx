@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { FaThumbsUp, FaShieldAlt, FaSmile } from "react-icons/fa";
-import { Chicle } from "next/font/google";
+import { Chicle, Ultra, Lobster } from "next/font/google";
 import Link from "next/link";
 
 const chicle = Chicle({
@@ -16,7 +16,7 @@ export default function HeroSectionCustom() {
       {/* Background Image (Top Section) */}
       <div className="relative w-full h-[50vh] md:h-[90vh] flex items-center justify-center">
         <Image
-          src="/images/hero.jpg" // Replace with your image path
+          src="/images/3.jpg" // Replace with your image path
           alt="Restaurant background"
           fill
           className="object-cover"
@@ -24,10 +24,10 @@ export default function HeroSectionCustom() {
         />
 
         {/* Overlay */}
-        <div className="absolute inset-0 bg-black/40 md:bg-black/60 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-black/30 md:bg-black/30 " />
 
         {/* Logo only over image on mobile */}
-        <div className="absolute  bottom-[13rem] md:bottom-auto md:left-20 md:top-20 flex justify-center md:justify-start z-20">
+        <div className="absolute  bottom-[13rem] md:bottom-auto md:left-20 md:top-40 flex justify-center md:justify-start z-20">
           <div
             className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-white flex items-center justify-center shadow-lg"
             data-aos="fade-right"
@@ -50,23 +50,23 @@ export default function HeroSectionCustom() {
           <div className="text-[#2b2b2b] md:text-white max-w-lg px-6 pb-6  mt-[-60px] md:mt-0 md:p-0  text-left md:text-left">
             {/* Title */}
             <h2
-              className={`${chicle.className} text-4xl md:text-5xl mt-3 text-[#c36b1e] md:text-white`}
+              className={`${chicle.className} text-4xl md:text-5xl my-3 text-[#c36b1e] md:text-white`}
             >
               Masala Taste of India
             </h2>
 
             {/* Features */}
             <ul className="space-y-2 text-base text-[12px] text-center md:text-left">
-              <li className="flex items-center justify-center md:justify-start gap-2   text-[#c36b1e]">
-                <FaThumbsUp className="text-[#c36b1e]  md:text-green-400 " />
+              <li className="flex items-center justify-center md:justify-start gap-2 text-[#c36b1e]  md:text-white">
+                <FaThumbsUp className="text-[#c36b1e]  md:text-white   " />
                 No platform fees
               </li>
-              <li className="flex items-center justify-center md:justify-start gap-2 text-center md:text-left text-[#c36b1e]">
-                <FaShieldAlt className="text-[#c36b1e]  md:text-green-400" />
+              <li className="flex items-center justify-center md:justify-start gap-2 text-center md:text-left text-[#c36b1e]  md:text-white">
+                <FaShieldAlt className="text-[#c36b1e]  md:text-white  " />
                 No payment fees
               </li>
-              <li className="flex items-center justify-center md:justify-start gap-2 text-center md:text-left text-[#c36b1e]">
-                <FaSmile className="text-[#c36b1e]  md:text-green-400" />
+              <li className="flex items-center justify-center md:justify-start gap-2 text-center md:text-left text-[#c36b1e]  md:text-white">
+                <FaSmile className="text-[#c36b1e]  md:text-white  " />
                 1135{" "}
                 <a
                   href="#"

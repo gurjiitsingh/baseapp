@@ -1,9 +1,9 @@
 
-import Header from "@/components/level-1/Header";
+import Header from "@/custom/cus-components/Header";
 
 import { SideCart } from '@/components/MiniCart/SideCart';
 import { BargerMenu } from '@/components/Bargermenu/Menu'
-import Footer from "@/components/level-1/Footer";
+import Footer from "@/custom/cus-components/Footer";
 import CartBottom from "./CartBottom/CartBottom";
 import { Providers } from "@/app/Providers";
 import { LanguageProvider } from "@/store/LanguageContext";
