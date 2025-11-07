@@ -18,7 +18,7 @@ export default function DiscountSection() {
         {/* Shoprabatt Card */}
           <div className="rounded-2xl overflow-hidden shadow-md border border-[#a94440]">
             {/* bg-[#d24a0f] */}
-        <div className="flex flex-col m-2 md:flex-row bg-[#7a1512] text-white rounded-2xl overflow-hidden   p-2">
+        <div className="flex flex-col m-2 md:flex-row bg-[#7a1512] text-white rounded-2xl overflow-hidden   p-0">
           {/* Image (1/4 on desktop, full width on mobile) */}
           <div className="w-full md:w-1/4 h-[140px] md:h-auto relative flex-shrink-0">
             <Image

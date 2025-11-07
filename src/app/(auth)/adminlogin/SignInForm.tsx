@@ -48,7 +48,7 @@ console.log("in form ",response)
 
   return (
     
-    <Card className="  lg:w-[70%] m-auto p-12" >
+    <Card className="bg-gray-100   lg:w-[70%] m-auto p-12" >
    
     <form onSubmit={submitHandler}>
       <div className="flex w-full flex-col gap-8  my-15 ">

@@ -57,11 +57,11 @@ export default function RootLayout({
                   <SafeSideCart />
                 </div>
 
-                <Header />
+               <Header />
 
                 {children}
 
-                <Footer />
+               {/* <Footer /> */}
 
                 {/* Client-side CartBottom wrapper component */}
                 <CartBottomWrapper /> {/* Conditionally rendered based on environment variable */}

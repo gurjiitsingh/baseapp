@@ -5,7 +5,7 @@ import { FaThumbsUp, FaShieldAlt, FaSmile } from "react-icons/fa";
 import { Chicle, Ultra, Lobster } from "next/font/google";
 import Link from "next/link";
 
-const chicle = Chicle({
+const chicle = Lobster({
   subsets: ["latin"],
   weight: "400",
 });
@@ -16,7 +16,7 @@ export default function HeroSectionCustom() {
       {/* Background Image (Top Section) */}
       <div className="relative w-full h-[50vh] md:h-[90vh] flex items-center justify-center">
         <Image
-          src="/images/3.jpg" // Replace with your image path
+          src="/images/29.jpg" // Replace with your image path
           alt="Restaurant background"
           fill
           className="object-cover"
@@ -24,10 +24,10 @@ export default function HeroSectionCustom() {
         />
 
         {/* Overlay */}
-        <div className="absolute inset-0 bg-black/30 md:bg-black/30 " />
+        <div className="absolute inset-0 bg-black/0 md:bg-black/0 " />
 
         {/* Logo only over image on mobile */}
-        <div className="absolute  bottom-[13rem] md:bottom-auto md:left-20 md:top-40 flex justify-center md:justify-start z-20">
+        {/* <div className="absolute  bottom-[13rem] md:bottom-auto md:left-20 md:top-40 flex justify-center md:justify-start z-20">
           <div
             className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-white flex items-center justify-center shadow-lg"
             data-aos="fade-right"
@@ -38,7 +38,7 @@ export default function HeroSectionCustom() {
               className="w-20 h-20 md:w-24 md:h-24 object-contain"
             />
           </div>
-        </div>
+        </div> */}
 
         {/* Curved white bottom */}
         <div className="absolute bottom-0 left-0 right-0 h-20 bg-white rounded-t-[50%]" />
@@ -46,24 +46,24 @@ export default function HeroSectionCustom() {
 
       {/* Text + Buttons Section (below image on mobile, overlay on desktop) */}
       <div className="relative bg-white md:bg-transparent md:absolute md:inset-0 md:flex md:items-center md:px-20 md:justify-start mt-0 md:mt-0">
-        <div className="w-full flex justify-center md:justify-start">
-          <div className="text-[#2b2b2b] md:text-white max-w-lg px-6 pb-6  mt-[-60px] md:mt-0 md:p-0  text-left md:text-left">
+        <div className="w-full flex justify-center md:justify-end">
+          <div className="text-[#2b2b2b] md:text-white max-w-2xl px-6 pb-6  mt-[-60px] md:mt-0 md:p-0  text-left md:text-left">
             {/* Title */}
             <h2
-              className={`${chicle.className} text-4xl md:text-5xl my-3 text-[#c36b1e] md:text-white`}
+              className={`${chicle.className} text-6xl md:text-[90px] my-3 text-black md:text-black`}
             >
-              Masala Taste of India
+              Anjana Bhog UK
             </h2>
 
             {/* Features */}
             <ul className="space-y-2 text-base text-[12px] text-center md:text-left">
               <li className="flex items-center justify-center md:justify-start gap-2 text-[#c36b1e]  md:text-white">
                 <FaThumbsUp className="text-[#c36b1e]  md:text-white   " />
-                No platform fees
+                Keine Plattformgebühren
               </li>
               <li className="flex items-center justify-center md:justify-start gap-2 text-center md:text-left text-[#c36b1e]  md:text-white">
                 <FaShieldAlt className="text-[#c36b1e]  md:text-white  " />
-                No payment fees
+                Keine Zahlungsgebühren
               </li>
               <li className="flex items-center justify-center md:justify-start gap-2 text-center md:text-left text-[#c36b1e]  md:text-white">
                 <FaSmile className="text-[#c36b1e]  md:text-white  " />
@@ -72,7 +72,7 @@ export default function HeroSectionCustom() {
                   href="#"
                   className="underline text-[#c36b1e]  md:text-white hover:text-green-400 "
                 >
-                  Guest Recommendations
+                   Empfehlungen von Gästen
                 </a>
               </li>
             </ul>

@@ -480,7 +480,7 @@ export async function fetchProducts(): Promise<ProductType[]> {
           updatedAt = data.updatedAt;
         }
       }
-console.log("data.isFeatured--------------", data)
+
       return {
         id: doc.id, // Firestore ID is always a string
         name: data.name ?? "",

@@ -23,10 +23,10 @@ export default function BuffetCard() {
       id="bf"
       className="max-w-5xl mx-auto px-2 md:px-0 my-8 pt-[50px] scroll-mt-[50px]"
     >
-      <div className="bg-white rounded-2xl overflow-hidden shadow-md">
+      <div className="bg-[#fff2e9] rounded-2xl overflow-hidden shadow-md">
         <div className="grid grid-cols-1 md:grid-cols-[0.6fr_1.4fr]">
           {/* Left Side - Image */}
-          <div className="relative w-full h-[180px] md:h-[240px]">
+          <div className="relative w-full h-[180px] md:h-[300px]">
             <Image
               src="/images/catering-1.jpg" // <-- replace with your image path
               alt="Buffet dishes"
@@ -37,7 +37,7 @@ export default function BuffetCard() {
           </div>
 
           {/* Right Side - Text */}
-          <div className="flex flex-col justify-center bg-[#f9f9f9] text-[#2b2b2b] px-5 py-5 md:px-8">
+          <div className="flex flex-col justify-center bg-[#fff2e9] text-[#2b2b2b] px-5 py-5 md:px-8">
             <h2
               className={`${chicle.className} text-[22px] sm:text-[26px] md:text-[28px] font-bold text-[#7a1512]`}
             >
@@ -46,7 +46,7 @@ export default function BuffetCard() {
 
             {/* Two-column content */}
             <div
-              className={`${lato.className} grid grid-cols-2 gap-x-6 gap-y-1 text-[13px] sm:text-[14px] md:text-[15px] mt-3 leading-snug`}
+              className={`${lato.className} grid grid-cols-2 gap-x-6 gap-y-1 text-[13px] sm:text-[14px] md:text-[15px] mt-1 leading-snug`}
             >
               <p>Indisches Buffet</p>
               <p>+ Alkoholfreies Getränk (1× – 0,4 L)</p>
