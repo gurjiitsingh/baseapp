@@ -4,10 +4,13 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { MdDeleteForever } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
-import { FaStar, FaRegStar } from "react-icons/fa"; // Star icons
+import { FaStar, FaRegStar } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
-import { deleteProduct, toggleFeatured } from "@/app/(universal)/action/products/dbOperation";
+import {
+  deleteProduct,
+  toggleFeatured,
+} from "@/app/(universal)/action/products/dbOperation";
 import { ProductType } from "@/lib/types/productType";
 import { formatCurrencyNumber } from "@/utils/formatCurrency";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
@@ -18,7 +21,8 @@ function TableRows({ product }: { product: ProductType }) {
   const { settings } = UseSiteContext();
   const { TEXT } = useLanguage();
   const [isFeatured, setIsFeatured] = useState(product.isFeatured);
-  console.log("product.isFeatured-------------",product.name, product.isFeatured)
+
+  console.log("product----------------------------",product)
 
   const price = formatCurrencyNumber(
     Number(product.price) ?? 0,
@@ -43,8 +47,9 @@ function TableRows({ product }: { product: ProductType }) {
   };
 
   async function handleDelete(product: ProductType) {
-    const confirmDelete =
-      confirm(TEXT.confirm_delete_product || "Do you want to delete the product?");
+    const confirmDelete = confirm(
+      TEXT.confirm_delete_product || "Do you want to delete the product?"
+    );
     if (!confirmDelete) return;
 
     try {
@@ -81,11 +86,12 @@ function TableRows({ product }: { product: ProductType }) {
       key={product.id}
       className="whitespace-nowrap hover:bg-green-50 dark:hover:bg-zinc-800 transition rounded-xl"
     >
+      {/* 🖼 Product Image */}
       <TableCell>
         <div className="px-3 py-1 text-center min-w-[100px]">
           {product.image && (
             <Image
-              className="h-12 w-12 object-cover rounded-md"
+              className="h-12 w-12 object-cover rounded-md shadow-sm"
               src={product.image}
               width={100}
               height={100}
@@ -95,26 +101,57 @@ function TableRows({ product }: { product: ProductType }) {
         </div>
       </TableCell>
 
+      {/* 🏷 Name + Featured */}
       <TableCell className="whitespace-normal break-words max-w-[180px]">
-       
-         <div className="flex items-center gap-2">
-           {product.sortOrder}.&nbsp;{product.name}
-          {/* Featured Star */}
-          <button onClick={handleFeatureToggle} className="flex items-center gap-2">
+        <div className="flex items-center gap-2">
+          {product.sortOrder}.&nbsp;{product.name}
+          <button
+            onClick={handleFeatureToggle}
+            className="flex items-center justify-center rounded-md hover:bg-yellow-100 p-1 transition"
+            title={isFeatured ? "Unmark as featured" : "Mark as featured"}
+          >
             {isFeatured ? (
-              <FaStar size={20} className="text-amber-700" /> // Green Star if featured
+              <FaStar size={18} className="text-yellow-600" />
             ) : (
-              <FaRegStar size={20} className="text-gray-400" /> // Gray Star if not featured
+              <FaRegStar size={18} className="text-gray-400" />
             )}
           </button>
         </div>
       </TableCell>
 
+      {/* 📂 Category */}
       <TableCell>{product.productCat}</TableCell>
+
+      {/* 💰 Prices */}
       <TableCell>{price}</TableCell>
       <TableCell>{discountedPrice}</TableCell>
+
+      {/* 📦 Quantity */}
       <TableCell>{product.stockQty}</TableCell>
 
+      {/* 💸 Tax */}
+      <TableCell>
+        {product.taxRate !== undefined && product.taxRate !== null ? (
+          <div className="flex flex-col">
+            <span className="text-sm font-medium text-gray-800">
+              {product.taxRate}%
+            </span>
+            <span
+              className={`text-[11px] px-1 py-[1px] rounded mt-1 w-fit ${
+               product.taxRate
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"
+              }`}
+            >
+              {product.taxRate ? "Included" : "Excluded"}
+            </span>
+          </div>
+        ) : (
+          <span className="text-sm text-gray-400 italic">—</span>
+        )}
+      </TableCell>
+
+      {/* 📋 Status */}
       <TableCell>
         <span
           className={`text-xs px-2 py-1 rounded-full capitalize font-semibold ${
@@ -126,45 +163,51 @@ function TableRows({ product }: { product: ProductType }) {
         </span>
       </TableCell>
 
+      {/* 📝 Description */}
       <TableCell className="whitespace-normal break-words max-w-[200px]">
         {product.productDesc}
       </TableCell>
 
-      
-
+      {/* ⚙️ Actions */}
       <TableCell>
         <div className="flex gap-2">
-          {/* Edit Button */}
+          {/* ✏️ Edit */}
           <Link
             href={{
-              pathname: "/admin/productsbase/editform",
+              pathname: "/admin/products/editform",
               query: { id: product.id },
             }}
           >
-            <Button size="sm" className="bg-red-500 px-1 py-0">
-              <CiEdit size={20} className="text-white" />
+            <Button
+              size="sm"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-0 transition"
+            >
+              <CiEdit size={18} />
             </Button>
           </Link>
 
-          {/* Variants Button */}
+          {/* 🧩 Variants */}
           <Link
             href={{
               pathname: "/admin/productsaddon",
               query: { id: product.id },
             }}
           >
-            <Button size="sm" className="bg-red-600 text-white px-1 py-0">
+            <Button
+              size="sm"
+              className="bg-amber-500 hover:bg-amber-600 text-white px-2 py-0 transition"
+            >
               {TEXT.button_variants || "Variants"}
             </Button>
           </Link>
 
-          {/* Delete Button */}
+          {/* 🗑 Delete */}
           <Button
             onClick={() => handleDelete(product)}
             size="sm"
-            className="bg-red-600 px-1 py-0"
+            className="bg-rose-600 hover:bg-rose-700 text-white px-2 py-0 transition"
           >
-            <MdDeleteForever size={20} className="text-white" />
+            <MdDeleteForever size={18} />
           </Button>
         </div>
       </TableCell>

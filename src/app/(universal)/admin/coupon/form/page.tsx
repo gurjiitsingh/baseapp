@@ -25,6 +25,7 @@ const Page = () => {
 
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [excludedCategoryIds, setExcludedCategoryIds] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -45,26 +46,10 @@ const Page = () => {
   };
 
   async function onsubmit(data: TcouponSchema) {
-    const formData = new FormData();
+    setIsSubmitting(true);
     const code = data.code.toUpperCase();
 
-    formData.append("code", code);
-    formData.append("discount", data.discount);
-    formData.append("offerType", data.offerType!);
-    formData.append("expiry", data.expiry!);
-    formData.append("discountType", data.discountType!);
-    formData.append("productCat", data.productCat);
-    formData.append("couponDesc", data.couponDesc!);
-    formData.append("minSpend", data.minSpend!);
-    if (data.isFeatured) {
-      formData.append("isFeatured", "true");
-    }
-
-    // Extra metadata
     const startDate = new Date();
-    const oneYearLater = new Date();
-    oneYearLater.setFullYear(startDate.getFullYear() + 1);
-
     const excludedNames = categories
       .filter((cat) => excludedCategoryIds.includes(cat.id))
       .map((cat) => cat.name)
@@ -82,7 +67,7 @@ const Page = () => {
       isFeatured: !!data.isFeatured,
       isActivated: true,
       applyPickup: data.applyPickup ?? true,
-  applyDelivery: data.applyDelivery ?? true,
+      applyDelivery: data.applyDelivery ?? true,
       excludedCategoryIds,
       message: excludedNames
         ? `Not applicable on ${excludedNames}.`
@@ -91,30 +76,31 @@ const Page = () => {
       createdAt: Timestamp.now(),
     };
 
-    console.log("couponData new data -------------", couponData)
-
     try {
       await addDoc(collection(db, "coupon"), couponData);
+      setValue("code", "");
+      setValue("discount", "");
+      setValue("minSpend", "");
+      setExcludedCategoryIds([]);
     } catch (err) {
       console.error("Failed to save coupon", err);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setValue("code", "");
-    setValue("discount", "");
-    setValue("minSpend", "");
-    setExcludedCategoryIds([]);
   }
 
   return (
     <form onSubmit={handleSubmit(onsubmit)}>
-      <div className="flex flex-col gap-4 p-5">
-        <h1>Create Coupon</h1>
+      <div className="flex flex-col gap-6 p-5">
+        <h1 className="text-xl font-semibold text-gray-800">
+          Create Coupon
+        </h1>
 
         <div className="flex flex-col lg:flex-row gap-5">
           {/* Left Box */}
           <div className="flex-1 flex flex-col gap-y-5">
-            <div className="bg-white rounded-xl p-4 border flex flex-col gap-3">
-              <h2 className="font-semibold">Coupon Detail</h2>
+            <div className="bg-white rounded-xl p-5 border flex flex-col gap-3 shadow-sm">
+              <h2 className="font-semibold text-gray-800">Coupon Detail</h2>
 
               <div>
                 <label className="label-style">
@@ -134,8 +120,8 @@ const Page = () => {
                 <label className="label-style">
                   Discount Type <span className="text-red-500">*</span>
                 </label>
-                <div className="flex items-center gap-4 mt-2">
-                  <label className="flex items-center gap-2">
+                <div className="flex items-center gap-5 mt-2">
+                  <label className="flex items-center gap-2 text-gray-700">
                     <input
                       type="radio"
                       value="flat"
@@ -143,7 +129,7 @@ const Page = () => {
                     />
                     Flat
                   </label>
-                  <label className="flex items-center gap-2">
+                  <label className="flex items-center gap-2 text-gray-700">
                     <input
                       type="radio"
                       value="percent"
@@ -170,7 +156,6 @@ const Page = () => {
                   {errors.discount?.message}
                 </span>
               </div>
-
               <input
                 type="hidden"
                 {...register("productCat", { value: "all" })}
@@ -178,8 +163,10 @@ const Page = () => {
             </div>
 
             {/* Conditions */}
-            <div className="bg-white rounded-xl p-4 border flex flex-col gap-3">
-              <h2 className="font-semibold">Discount Conditions</h2>
+            <div className="bg-white rounded-xl p-5 border flex flex-col gap-3 shadow-sm">
+              <h2 className="font-semibold text-gray-800">
+                Discount Conditions
+              </h2>
 
               <div>
                 <label className="label-style">
@@ -213,46 +200,24 @@ const Page = () => {
 
           {/* Right Box */}
           <div className="flex-1 flex flex-col gap-5">
-            <div className="bg-white rounded-xl p-4 border flex flex-col gap-3">
-              <h2 className="font-semibold">General Detail</h2>
-
-              <input
-                type="hidden"
-                {...register("couponDesc", {
-                  value: "This is discount coupon",
-                })}
-              />
+            <div className="bg-white rounded-xl p-5 border flex flex-col gap-3 shadow-sm">
+              <h2 className="font-semibold text-gray-800">General Detail</h2>
 
               <div>
                 <label className="label-style">Description</label>
                 <textarea
                   {...register("couponDesc")}
                   className="textarea-style"
+                  placeholder="Write short coupon description"
                 />
                 <span className="text-[0.8rem] text-destructive">
                   {errors.couponDesc && "Description is required"}
                 </span>
               </div>
-
-        
-
-             
-
-      
-
-         
-
-            
             </div>
-          </div>
 
-
-
-<div className="flex-1 flex flex-col gap-5">
-            <div className="bg-white rounded-xl p-4 border flex flex-col gap-3">
-              <h2 className="font-semibold">General Conditions</h2>
-
-         
+            <div className="bg-white rounded-xl p-5 border flex flex-col gap-3 shadow-sm">
+              <h2 className="font-semibold text-gray-800">General Conditions</h2>
 
               <div>
                 <label className="label-style">Offer Type</label>
@@ -264,22 +229,16 @@ const Page = () => {
                   <option value="MA">MA</option>
                   <option value="CM">CM</option>
                 </select>
-                <span className="text-[0.8rem] text-destructive">
-                  {errors.offerType?.message}
-                </span>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
                 <label className="label-style">Featured Coupon</label>
                 <input type="checkbox" {...register("isFeatured")} />
-                <span className="text-[0.8rem] text-destructive">
-                  {errors.isFeatured?.message}
-                </span>
               </div>
 
               <div className="flex flex-col gap-2">
                 <label className="label-style">Apply Coupon On</label>
-                <label className="flex items-center gap-2">
+                <label className="flex items-center gap-2 text-gray-700">
                   <input
                     type="checkbox"
                     defaultChecked
@@ -287,7 +246,7 @@ const Page = () => {
                   />
                   Pickup
                 </label>
-                <label className="flex items-center gap-2">
+                <label className="flex items-center gap-2 text-gray-700">
                   <input
                     type="checkbox"
                     defaultChecked
@@ -301,7 +260,7 @@ const Page = () => {
                 <label className="label-style">Exclude Categories</label>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {categories.map((cat) => (
-                    <label key={cat.id} className="flex items-center gap-2">
+                    <label key={cat.id} className="flex items-center gap-2 text-gray-700">
                       <input
                         type="checkbox"
                         checked={excludedCategoryIds.includes(cat.id)}
@@ -313,14 +272,15 @@ const Page = () => {
                 </div>
               </div>
 
-              <Button type="submit" className="w-full">
-                Submit
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className={`btn-save ${isSubmitting ? "opacity-80" : ""}`}
+              >
+                {isSubmitting ? "Saving..." : "Save Coupon"}
               </Button>
             </div>
           </div>
-
-
-
         </div>
       </div>
     </form>

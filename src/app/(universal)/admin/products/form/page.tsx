@@ -12,6 +12,7 @@ import { addNewProduct } from "@/app/(universal)/action/products/dbOperation";
 
 const Page = () => {
   const [categoryData, setCategoryData] = useState<categoryType[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     async function prefetch() {
@@ -24,7 +25,6 @@ const Page = () => {
   const {
     register,
     formState: { errors },
-    setValue,
     handleSubmit,
     reset,
   } = useForm<TnewProductSchema>({
@@ -34,13 +34,14 @@ const Page = () => {
       discountPrice: 0,
       stockQty: -1,
       sortOrder: 0,
+      taxRate: 0, // ✅ default tax 0%
     },
   });
 
   async function onsubmit(data: TnewProductSchema) {
+    setIsSubmitting(true);
     const formData = new FormData();
 
-    // Basic fields
     formData.append("name", data.name);
     formData.append("price", String(data.price ?? 0));
     formData.append("discountPrice", String(data.discountPrice ?? 0));
@@ -50,26 +51,27 @@ const Page = () => {
     formData.append("productDesc", data.productDesc || "");
     formData.append("status", data.status || "published");
     formData.append("isFeatured", data.isFeatured ? "true" : "false");
+    formData.append("taxRate", String(data.taxRate ?? 0)); // ✅ added tax info
 
-    // Handle image resizing
     if (data.image && data.image[0]) {
       try {
-        const resizedImage = await resizeImage(data.image[0], 400); // resize to height 400px
+        const resizedImage = await resizeImage(data.image[0], 400);
         formData.append("image", resizedImage);
       } catch (error) {
         console.error("Image resize failed:", error);
         alert("Image resize failed. Please try again.");
+        setIsSubmitting(false);
         return;
       }
     } else {
-      // no image selected
       formData.append("image", "0");
     }
 
     const result = await addNewProduct(formData);
+    setIsSubmitting(false);
 
     if (!result?.errors) {
-      alert("✅ Product added successfully!");
+    //  alert("✅ Product added successfully!");
       reset({
         name: "",
         price: 0,
@@ -80,6 +82,7 @@ const Page = () => {
         productDesc: "",
         isFeatured: false,
         status: "published",
+      //  taxRate: 0, // ✅ reset tax field
       });
     } else {
       console.error("❌ Validation errors:", result.errors);
@@ -88,108 +91,123 @@ const Page = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onsubmit)}>
-      <div className="flex flex-col gap-4 p-5">
-        <h1 className="text-2xl font-semibold">Create Product</h1>
+    <form onSubmit={handleSubmit(onsubmit)} className="w-full max-w-7xl mx-auto p-5">
+      <h1 className="text-2xl font-semibold mb-4">Create Product</h1>
 
-        <div className="flex flex-col lg:flex-row gap-5">
-          {/* LEFT BOX */}
-          <div className="flex-1 flex flex-col gap-y-5">
-            {/* Product Info */}
-            <div className="flex flex-col gap-3 bg-white rounded-xl p-4 border">
-              <h1 className="font-semibold">Product</h1>
-              {/* Product Name */}
-              <div className="flex flex-col gap-1">
-                <label className="label-style">
-                  Product Name<span className="text-red-500">*</span>
-                </label>
-                <input {...register("name")} className="input-style" placeholder="Enter Title" />
-                <p className="text-[0.8rem] text-destructive">{errors.name?.message}</p>
-              </div>
+      <div className="flex flex-col lg:flex-row gap-5">
+        {/* LEFT COLUMN */}
+        <div className="flex-1 flex flex-col gap-5">
+          {/* Product Info */}
+          <div className="bg-white rounded-xl p-4 border shadow-sm flex flex-col gap-3">
+            <h2 className="font-semibold text-lg text-gray-800">Product Details</h2>
 
-              {/* Category */}
-              <div className="flex flex-col gap-1">
-                <label className="label-style">Category</label>
-                <select {...register("categoryId")} className="input-style">
-                  <option value="">Select Category</option>
-                  {categoryData.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-                <p className="text-[0.8rem] text-destructive">{errors.categoryId?.message}</p>
-              </div>
+            <div className="flex flex-col gap-1">
+              <label className="label-style">
+                Product Name<span className="text-red-500">*</span>
+              </label>
+              <input {...register("name")} className="input-style py-1" placeholder="Enter product name" />
+              <p className="text-xs text-destructive">{errors.name?.message}</p>
             </div>
 
-            {/* Price Section */}
-            <div className="flex flex-col gap-3 bg-white rounded-xl p-4 border">
-              <h1 className="font-semibold">Price Details</h1>
-
-              {/* Price Fields */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div>
-                  <label className="label-style">Regular Price</label>
-                  <input {...register("price")} className="input-style" placeholder="Enter Price" />
-                  <p className="text-[0.8rem] text-destructive">{errors.price?.message}</p>
-                </div>
-                <div>
-                  <label className="label-style">Discount Price</label>
-                  <input {...register("discountPrice")} className="input-style" placeholder="Enter Discount Price" />
-                  <p className="text-[0.8rem] text-destructive">{errors.discountPrice?.message}</p>
-                </div>
-              </div>
-
-              {/* Stock Quantity */}
-              <div>
-                <label className="label-style">Quantity</label>
-                <input {...register("stockQty")} className="input-style" placeholder="Enter stock quantity" />
-                <p className="text-[0.8rem] text-destructive">{errors.stockQty?.message}</p>
-              </div>
+            <div className="flex flex-col gap-1">
+              <label className="label-style">Category</label>
+              <select {...register("categoryId")} className="input-style py-1">
+                <option value="">Select Category</option>
+                {categoryData.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-destructive">{errors.categoryId?.message}</p>
             </div>
           </div>
 
-          {/* RIGHT BOX */}
-          <div className="flex-1 flex flex-col gap-5">
-            {/* Image Upload */}
-            <div className="flex flex-col gap-3 bg-white rounded-xl p-4 border">
-              <h1 className="font-semibold">Pictures</h1>
-              <label className="label-style">Featured Image</label>
-              <input {...register("image")} type="file" className="input-image-style" />
-              <p className="text-[0.8rem] text-destructive">{errors.image && "Select product image"}</p>
+          {/* Price Info */}
+          <div className="bg-white rounded-xl p-4 border shadow-sm flex flex-col gap-3">
+            <h2 className="font-semibold text-lg text-gray-800">Price & Stock</h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label className="label-style">Regular Price</label>
+                <input {...register("price")} className="input-style py-1" placeholder="Enter price" />
+                <p className="text-xs text-destructive">{errors.price?.message}</p>
+              </div>
+              <div>
+                <label className="label-style">Discount Price</label>
+                <input {...register("discountPrice")} className="input-style py-1" placeholder="Enter discount price" />
+                <p className="text-xs text-destructive">{errors.discountPrice?.message}</p>
+              </div>
             </div>
 
-            {/* General Details */}
-            <div className="flex flex-col gap-3 bg-white rounded-xl p-4 border">
-              <h1 className="font-semibold">General Details</h1>
-
-              <div>
-                <label className="label-style">Description</label>
-                <textarea {...register("productDesc")} className="textarea-style" />
-              </div>
-
-              <div>
-                <label className="label-style">Sort Order</label>
-                <input {...register("sortOrder")} className="input-style" />
-                <p className="text-[0.8rem] text-destructive">{errors.sortOrder?.message}</p>
-              </div>
-
-              <div>
-                <label className="label-style">Status</label>
-                <select {...register("status")} className="input-style" defaultValue="published">
-                  <option value="published">Published</option>
-                  <option value="draft">Draft</option>
-                  <option value="out_of_stock">Out of Stock</option>
-                </select>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <label className="label-style">Featured Product</label>
-                <input {...register("isFeatured")} type="checkbox" />
-              </div>
-
-              <Button type="submit">Add Product</Button>
+            {/* ✅ Added Tax Field */}
+            <div>
+              <label className="label-style">Tax Rate (%)</label>
+              <input
+                {...register("taxRate")}
+                className="input-style py-1"
+                placeholder="e.g. 5 for 5%"
+                type="number"
+                step="0.01"
+                min="0"
+              />
+              <p className="text-xs text-destructive">{errors.taxRate?.message}</p>
             </div>
+
+            <div>
+              <label className="label-style">Stock Quantity</label>
+              <input {...register("stockQty")} className="input-style py-1" placeholder="Enter stock quantity" />
+              <p className="text-xs text-destructive">{errors.stockQty?.message}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN */}
+        <div className="flex-1 flex flex-col gap-5">
+          {/* Image Upload */}
+          <div className="bg-white rounded-xl p-4 border shadow-sm flex flex-col gap-3">
+            <h2 className="font-semibold text-lg text-gray-800">Product Image</h2>
+            <label className="label-style">Featured Image</label>
+            <input {...register("image")} type="file" className="input-style py-1" />
+            <p className="text-xs text-destructive">{errors.image && "Please select a product image"}</p>
+          </div>
+
+          {/* General Info */}
+          <div className="bg-white rounded-xl p-4 border shadow-sm flex flex-col gap-3">
+            <h2 className="font-semibold text-lg text-gray-800">General Information</h2>
+
+            <div>
+              <label className="label-style">Description</label>
+              <textarea {...register("productDesc")} className="textarea-style py-1" placeholder="Enter description" />
+            </div>
+
+            <div>
+              <label className="label-style">Sort Order</label>
+              <input {...register("sortOrder")} className="input-style py-1" />
+              <p className="text-xs text-destructive">{errors.sortOrder?.message}</p>
+            </div>
+
+            <div>
+              <label className="label-style">Status</label>
+              <select {...register("status")} className="input-style py-1">
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+                <option value="out_of_stock">Out of Stock</option>
+              </select>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <input {...register("isFeatured")} type="checkbox" />
+              <label className="label-style">Featured Product</label>
+            </div>
+
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className={`btn-save w-full mt-2 ${isSubmitting ? "opacity-80" : ""}`}
+            >
+              {isSubmitting ? "Saving..." : "Save Product"}
+            </Button>
           </div>
         </div>
       </div>

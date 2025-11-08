@@ -376,3 +376,52 @@ button:disabled {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Reusable Save Button Style */
+.btn-save1 {
+  @apply bg-amber-500 text-white font-bold text-lg py-2 px-6 rounded-xl shadow-md 
+         hover:bg-amber-600 hover:shadow-lg transition-all duration-200 
+         active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed;
+}
+/* Reusable Save Button Style */
+.btn-save1 {
+  @apply bg-amber-500 text-white font-bold text-lg py-2 px-6 rounded-xl shadow-md 
+         hover:bg-amber-600 hover:shadow-lg transition-all duration-200 
+         active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed;
+}
+
+
+.btn-save {
+  @apply bg-gradient-to-r from-amber-500 to-orange-600 
+         text-white font-semibold text-lg tracking-wide
+         py-2.5 px-8 rounded-xl shadow-md 
+         transition-all duration-300 ease-out
+         hover:from-orange-500 hover:to-amber-600 
+         hover:shadow-lg active:scale-95;
+}
+
+/* When disabled or loading */
+.btn-save:disabled {
+  @apply opacity-70 cursor-not-allowed bg-gradient-to-r from-gray-400 to-gray-500;
+}
+
+
+
+
+
+
+.label-style {
+  @apply text-sm font-medium text-gray-700;
+}
+
+.input-style {
+  @apply w-full border border-gray-300 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm;
+}
+
+.textarea-style {
+  @apply w-full border border-gray-300 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm min-h-[80px];
+}
+
+.btn-save {
+  @apply bg-orange-500 hover:bg-orange-600 text-white font-semibold px-5 py-2 rounded-lg transition-all duration-300 shadow-sm;
+}

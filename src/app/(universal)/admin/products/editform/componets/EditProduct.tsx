@@ -1,15 +1,10 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
-
-//import Description from "./componets/Description";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { editPorductSchema, TeditProductSchema } from "@/lib/types/productType";
-//import { Images } from "lucide-react";
-// import { fetchCategories } from "@/app/(universal)/action/category/dbOperations";
-//import { fetchbrands } from "@/app/(universal)/action/brads/dbOperations";
-
 import { useRouter, useSearchParams } from "next/navigation";
 import { fetchCategories } from "@/app/(universal)/action/category/dbOperations";
 import { categoryType } from "@/lib/types/categoryType";
@@ -20,280 +15,269 @@ import {
 
 const EditProduct = () => {
   const [categoryData, setCategoryData] = useState<categoryType[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const searchParams = useSearchParams();
   const id = searchParams.get("id") || "";
-
   const router = useRouter();
+
   const {
     register,
     formState: { errors },
     setValue,
     handleSubmit,
-    // setError,
   } = useForm<TeditProductSchema>({
     resolver: zodResolver(editPorductSchema),
   });
+
   useEffect(() => {
-   
-    async function prefetch() {
+    async function loadProduct() {
       const data = await fetchProductById(id);
-     
-
-      if (!data) return; // exit early if null
-
-      let priceS = "";
-      if (data.price !== undefined) {
-        priceS = data.price.toString().replace(/\./g, ",");
-      }
-
-      let discountPriceS = "";
-      if (data.discountPrice !== undefined) {
-        discountPriceS = data.discountPrice.toString().replace(/\./g, ",");
-      }
+      if (!data) return;
 
       setValue("id", id);
       setValue("name", data.name);
       setValue("productDesc", data.productDesc);
       setValue("oldImgageUrl", data.image);
-      setValue("price", priceS);
-      setValue("stockQty", data?.stockQty ? data.stockQty.toString() : "-1");
-      setValue("discountPrice", discountPriceS ?? "0,00");
+      setValue("price", data.price?.toString() ?? "0");
+      setValue("discountPrice", data.discountPrice?.toString() ?? "0");
+      setValue("stockQty", data.stockQty?.toString() ?? "-1");
       setValue("status", data.status ?? "published");
-
-      if (data.sortOrder !== undefined) {
-        setValue("sortOrder", data.sortOrder.toString());
-      }
-
+      setValue("sortOrder", data.sortOrder?.toString() ?? "0");
       setValue("categoryId", data.categoryId);
       setValue("isFeatured", data.isFeatured);
-
-      // Optional: reassign to productData if needed elsewhere
-     
+      setValue("taxRate", data.taxRate?.toString() ?? "");
+      setValue("taxType", data.taxType ?? "inclusive");
     }
 
-    prefetch();
-  }, []);
-
-  useEffect(() => {
-    async function prefetch() {
-      const categoriesData = await fetchCategories();
-      // console.log("cat id --------", categoriesData)
-      //   const brandData = await fetchbrands();
-      setCategoryData(categoriesData);
-      // setBrand(brandData);
+    async function loadCategories() {
+      const categories = await fetchCategories();
+      setCategoryData(categories);
     }
-    prefetch();
-  }, []);
+
+    loadProduct();
+    loadCategories();
+  }, [id, setValue]);
 
   async function onsubmit(data: TeditProductSchema) {
+    setIsSubmitting(true);
     const formData = new FormData();
- 
+
+    formData.append("id", data.id!);
     formData.append("name", data.name);
     formData.append("price", data.price);
-    formData.append("discountPrice", data.discountPrice! ?? "0.00");
-      formData.append("stockQty", data.stockQty! ?? "-1");
+    formData.append("discountPrice", data.discountPrice ?? "0.00");
+    formData.append("stockQty", data.stockQty ?? "-1");
     formData.append("categoryId", data.categoryId!);
     formData.append("sortOrder", data.sortOrder);
-    formData.append("productDesc", data.productDesc!);
-    formData.append("image", data.image[0]);
-    formData.append("oldImgageUrl", data.oldImgageUrl!);
+    formData.append("productDesc", data.productDesc ?? "");
     formData.append("status", data.status ?? "published");
-    // formData.append("isFeatured",data.isFeatured)
-    formData.append("id", data.id!);
+    formData.append("oldImgageUrl", data.oldImgageUrl ?? "");
+    formData.append("isFeatured", data.isFeatured ? "true" : "false");
 
-    const result = await editProduct(formData);
+    // Tax fields
+    formData.append("taxRate", data.taxRate ?? "");
+    formData.append("taxType", data.taxType ?? "inclusive");
 
-    if (!result?.errors) {
-      router.push(`/admin/productsbase?productId=${data.id}`);
-    } else {
-      alert("Some thing went wrong");
+    if (data.image && data.image[0]) {
+      formData.append("image", data.image[0]);
     }
 
-    
-     console.log(data);
+    const result = await editProduct(formData);
+    setIsSubmitting(false);
+
+    if (!result?.errors) {
+   //   alert("✅ Product updated successfully!");
+      router.push(`/admin/products?productId=${data.id}`);
+    } else {
+      alert("❌ Something went wrong. Check console for details.");
+      console.error(result.errors);
+    }
   }
-  //   function setSelectedIndex(s, i){
-  // s.options[i-1].selected = true;
-  // return;
-  // }
-  //setSelectedIndex(document.getElementById("ddl_example3"),5);
 
   return (
-    <>
-      <form onSubmit={handleSubmit(onsubmit)}>
-        <div className="flexflex flex-col gap-4 p-5">
-          <h1>Edit Product</h1>
+    <form
+      onSubmit={handleSubmit(onsubmit)}
+      className="w-full max-w-7xl mx-auto p-5"
+    >
+      <h1 className="text-2xl font-semibold mb-4">Edit Product</h1>
 
-          <div className="flex flex-col lg:flex-row gap-5 ">
-            {/* left box */}
-            <div className="flex-1 flex flex-col gap-y-2">
-              <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border-0">
-                <h1 className="font-semibold">Product</h1>
-                <div className="flex w-full flex-col gap-2  my-2 ">
-                  <input {...register("id")} hidden />
+      <div className="flex flex-col lg:flex-row gap-5">
+        {/* LEFT COLUMN */}
+        <div className="flex-1 flex flex-col gap-5">
+          {/* Product Details */}
+          <div className="bg-white rounded-xl p-4 border shadow-sm flex flex-col gap-3">
+            <h2 className="font-semibold text-lg text-gray-800">Product Details</h2>
 
-                  <div className="flex flex-col gap-1 w-full">
-                    <label className="label-style" htmlFor="product-title">
-                      Product Name<span className="text-red-500">*</span>{" "}
-                    </label>
-                    <input {...register("name")} className="input-style" />
-                    <span className="text-[0.8rem] font-medium text-destructive">
-                      {errors.name?.message && (
-                        <span>{errors.name?.message}</span>
-                      )}
-                    </span>
-                  </div>
-                  <input {...register("categoryIdOld")} hidden />
-                  <div className="flex flex-col gap-1 w-full">
-                    <label className="label-style" htmlFor="product-title">
-                      Category<span className="text-red-500">*</span>{" "}
-                    </label>
-                    <select {...register("categoryId")} className="input-style">
-                      <option key="wer" value="0">
-                        Do not change Category
-                      </option>
-                      {categoryData.map(
-                        (category: { name: string; id: string }, i: number) => {
-                          // console.log("cat id -------", category.id);
-                          return (
-                            <option key={i} value={category.id}>
-                              {category.name}
-                            </option>
-                          );
-                        }
-                      )}
-                    </select>
-                    <span className="text-[0.8rem] font-medium text-destructive">
-                      {errors.categoryId?.message && (
-                        <p>{errors.categoryId?.message}</p>
-                      )}
-                    </span>
-                  </div>
-                </div>
+            <input {...register("id")} hidden />
+
+            <div className="flex flex-col gap-1">
+              <label className="label-style">
+                Product Name<span className="text-red-500">*</span>
+              </label>
+              <input
+                {...register("name")}
+                className="input-style py-1"
+                placeholder="Enter product name"
+              />
+              <p className="text-xs text-destructive">{errors.name?.message}</p>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="label-style">Category</label>
+              <select {...register("categoryId")} className="input-style py-1">
+                <option value="0">Do not change Category</option>
+                {categoryData.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-destructive">
+                {errors.categoryId?.message}
+              </p>
+            </div>
+          </div>
+
+          {/* Price Section */}
+          <div className="bg-white rounded-xl p-4 border shadow-sm flex flex-col gap-3">
+            <h2 className="font-semibold text-lg text-gray-800">
+              Price & Stock
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label className="label-style">Regular Price</label>
+                <input
+                  {...register("price")}
+                  className="input-style py-1"
+                  placeholder="Enter price"
+                />
+                <p className="text-xs text-destructive">
+                  {errors.price?.message}
+                </p>
               </div>
-              <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border-0">
-                <h1 className="font-semibold">Price Details</h1>
-                <div className="flex w-full flex-col gap-2  my-2 ">
-                  {/* Price Fields */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div>
-                  <label className="label-style">Regular Price</label>
-                  <input {...register("price")} className="input-style" placeholder="Enter Price" />
-                  <p className="text-[0.8rem] text-destructive">{errors.price?.message}</p>
-                </div>
-                <div>
-                  <label className="label-style">Discount Price</label>
-                  <input {...register("discountPrice")} className="input-style" placeholder="Enter Discount Price" />
-                  <p className="text-[0.8rem] text-destructive">{errors.discountPrice?.message}</p>
-                </div>
-              </div>
-
-            
-
-                  <div className="flex flex-col gap-1 w-full">
-                    <label className="label-style" htmlFor="product-title">
-                      Quantity<span className="text-red-500"></span>{" "}
-                    </label>
-                    <input
-                      {...register("stockQty")}
-                      className="input-style"
-                      placeholder="Enter Price"
-                    />
-                    <span className="text-[0.8rem] font-medium text-destructive">
-                      {errors.stockQty?.message && (
-                        <span>{errors.stockQty?.message}</span>
-                      )}
-                    </span>
-                  </div>
-                </div>
+              <div>
+                <label className="label-style">Discount Price</label>
+                <input
+                  {...register("discountPrice")}
+                  className="input-style py-1"
+                  placeholder="Enter discount price"
+                />
+                <p className="text-xs text-destructive">
+                  {errors.discountPrice?.message}
+                </p>
               </div>
             </div>
-            {/* End of left box */}
-            <input {...register("oldImgageUrl")} hidden />
-            <div className="flex-1 flex flex-col gap-5 h-full">
-              <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border-0">
-                <h1 className="font-semibold">Pictures</h1>
-                <div className="flex flex-col gap-1">
-                  <label className="label-style">Product Image</label>
-                  <input
-                    {...register("image", { required: true })}
-                    type="file"
-                    className="input-image-style"
-                  />
 
-                  <p className="text-[0.8rem] font-medium text-destructive">
-                    {errors.image && <span>Select product image</span>}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border-0">
-                <h1 className="font-semibold">General Detail</h1>
-
-                <div className="flex flex-col gap-1">
-                  <label className="label-style">Product description</label>
-
-                  <textarea
-                    {...register(
-                      "productDesc"
-                      //   , {
-                      //   validate: {
-                      //     pattern: (value: string) => !/[!]/.test(value),
-                      //   },
-                      // }
-                    )}
-                    className="textarea-style"
-                  />
-                  <p className="text-[0.8rem] font-medium text-destructive">
-                    {errors.productDesc && (
-                      <span>Product description is required</span>
-                    )}
-                  </p>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="label-style">Sort Order</label>
-                  <input {...register("sortOrder")} className="input-style" />
-                  <span className="text-[0.8rem] font-medium text-destructive">
-                    {errors.sortOrder?.message && (
-                      <span>{errors.sortOrder?.message}</span>
-                    )}
-                  </span>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="label-style">Status</label>
-                  <select {...register("status")} className="input-style">
-                    <option value="published">Published</option>
-                    <option value="draft">Draft</option>
-                    <option value="out_of_stock">Out of Stock</option>
-                  </select>
-                  <span className="text-[0.8rem] font-medium text-destructive">
-                    {errors.status?.message && (
-                      <span>{errors.status?.message}</span>
-                    )}
-                  </span>
-                </div>
-
-                <div className="flex    items-center gap-4">
-                  <label className="label-style">Featured Product</label>
-                  <input {...register("isFeatured")} type="checkbox" />
-                  <p className="text-[0.8rem] font-medium text-destructive">
-                    {errors.isFeatured?.message && (
-                      <p>{errors.isFeatured?.message}</p>
-                    )}
-                  </p>
-                </div>
-
-                <Button className="bg-red-500" type="submit">
-                  Edit Product{" "}
-                </Button>
-              </div>
+            <div>
+              <label className="label-style">Stock Quantity</label>
+              <input
+                {...register("stockQty")}
+                className="input-style py-1"
+                placeholder="Enter stock quantity"
+              />
+              <p className="text-xs text-destructive">
+                {errors.stockQty?.message}
+              </p>
             </div>
           </div>
         </div>
-      </form>
-    </>
+
+        {/* RIGHT COLUMN */}
+        <div className="flex-1 flex flex-col gap-5">
+          {/* Image Upload */}
+          <div className="bg-white rounded-xl p-4 border shadow-sm flex flex-col gap-3">
+            <h2 className="font-semibold text-lg text-gray-800">Product Image</h2>
+            <input {...register("oldImgageUrl")} hidden />
+            <input
+              {...register("image")}
+              type="file"
+              className="input-style py-1"
+            />
+            <p className="text-xs text-destructive">
+              {errors.image && "Select product image"}
+            </p>
+          </div>
+
+          {/* General Info + Tax */}
+          <div className="bg-white rounded-xl p-4 border shadow-sm flex flex-col gap-3">
+            <h2 className="font-semibold text-lg text-gray-800">
+              General & Tax Details
+            </h2>
+
+            <div>
+              <label className="label-style">Product Description</label>
+              <textarea
+                {...register("productDesc")}
+                className="textarea-style py-1"
+                placeholder="Enter description"
+              />
+              <p className="text-xs text-destructive">
+                {errors.productDesc?.message}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label className="label-style">Sort Order</label>
+                <input {...register("sortOrder")} className="input-style py-1" />
+                <p className="text-xs text-destructive">
+                  {errors.sortOrder?.message}
+                </p>
+              </div>
+
+              <div>
+                <label className="label-style">Status</label>
+                <select {...register("status")} className="input-style py-1">
+                  <option value="published">Published</option>
+                  <option value="draft">Draft</option>
+                  <option value="out_of_stock">Out of Stock</option>
+                </select>
+                <p className="text-xs text-destructive">
+                  {errors.status?.message}
+                </p>
+              </div>
+            </div>
+
+            {/* TAX SECTION */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label className="label-style">GST Rate (%)</label>
+                <input
+                  {...register("taxRate")}
+                  className="input-style py-1"
+                  placeholder="e.g. 5, 12, 18"
+                />
+                <p className="text-xs text-destructive">
+                  {errors.taxRate?.message}
+                </p>
+              </div>
+
+              <div>
+                <label className="label-style">GST Type</label>
+                <select {...register("taxType")} className="input-style py-1">
+                  <option value="inclusive">Inclusive (Deducted from total)</option>
+                  <option value="exclusive">Exclusive (Added on total)</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <input {...register("isFeatured")} type="checkbox" />
+              <label className="label-style">Featured Product</label>
+            </div>
+
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className={`btn-save w-full mt-2 ${isSubmitting ? "opacity-80" : ""}`}
+            >
+              {isSubmitting ? "Saving..." : "Save Changes"}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </form>
   );
 };
 

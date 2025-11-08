@@ -14,189 +14,182 @@ import {
 } from "@/app/(universal)/action/category/dbOperations";
 
 const PageComp = () => {
-  //const searchParams = useSearchParams();
-  //const id = searchParams.get("id") || "";
-  //const id = params.editform as string;
-
   const searchParams = useSearchParams();
   const id = searchParams.get("id") || "";
-  // console.log("this is product edit---------------",id)
-
-  //const [categories, setCategory] = useState<categoryTypeArr>([]);
-  //const [product, setProduct] = useState({});
   const router = useRouter();
+
   const {
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     setValue,
     handleSubmit,
-    // setError,
   } = useForm<TeditCategorySchema>({
     resolver: zodResolver(editCategorySchema),
   });
 
   useEffect(() => {
     async function prefetch() {
-    const  categoryData = await fetchCategoryById(id);
-    console.log("cat data -------",categoryData)
+      const categoryData = await fetchCategoryById(id);
       setValue("id", id);
       setValue("name", categoryData.name);
       setValue("desc", categoryData.desc);
       setValue("oldImgageUrl", categoryData.image);
-      setValue("sortOrder",categoryData.sortOrder!.toString())
-      setValue("desc",categoryData.desc!)
-      setValue("isFeatured",categoryData.isFeatured!.toString())
-
-      
+      setValue("sortOrder", categoryData.sortOrder!.toString());
+      setValue("isFeatured", categoryData.isFeatured!.toString());
     }
-
     prefetch();
-  }, []);
+  }, [id, setValue]);
 
   async function onsubmit(data: TeditCategorySchema) {
     const formData = new FormData();
-   
     formData.append("name", data.name);
     formData.append("oldImgageUrl", data.oldImgageUrl);
     formData.append("desc", data.desc);
     formData.append("image", data.image[0]);
     formData.append("isFeatured", data.isFeatured!);
     formData.append("id", data.id!);
-    formData.append("sortOrder",data.sortOrder!)
-   
+    formData.append("sortOrder", data.sortOrder!);
 
-   const result = await editCategory(formData);
-
+    const result = await editCategory(formData);
     if (!result?.errors) {
       router.push("/admin/categories");
     } else {
-      alert("Some thing went wrong");
+      alert("Something went wrong");
     }
   }
 
   return (
-    <>
-      <form onSubmit={handleSubmit(onsubmit)}>
-        <div className="flexflex flex-col gap-4 p-5">
-          <h1>Edit Category</h1>
+    <form onSubmit={handleSubmit(onsubmit)} className="min-h-screen bg-gray-50">
+      <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
+        {/* Page Title */}
+        <h1 className="text-xl sm:text-2xl font-semibold text-gray-800 border-b pb-3">
+          Edit Category
+        </h1>
 
-          <div className="flex flex-col lg:flex-row gap-5 ">
-            {/* left box */}
-            <div className="flex-1 flex flex-col gap-y-5">
-              <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border">
-                <h1 className="font-semibold">Category</h1>
-                <div className="flex w-full flex-col gap-2  my-2 ">
-                  <input {...register("id")} hidden />
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Left Section */}
+          <div className="flex-1 flex flex-col gap-5">
+            <div className="bg-white border rounded-2xl shadow-sm p-4 sm:p-6 space-y-4">
+              <h2 className="text-lg font-semibold text-gray-700">
+                Category Info
+              </h2>
 
-                  <div className="flex flex-col gap-1 w-full">
-                    <label className="label-style" htmlFor="product-title">
-                      Name<span className="text-red-500">*</span>{" "}
-                    </label>
-                    <input {...register("name")} className="input-style" />
-                    <span className="text-[0.8rem] font-medium text-destructive">
-                      {errors.name?.message && (
-                        <span>{errors.name?.message}</span>
-                      )}
-                    </span>
-                  </div>
+              <input {...register("id")} hidden />
 
-                  <div className="flex flex-col gap-1 w-full">
-                    <label className="label-style" htmlFor="product-title">
-                      Sort Order<span className="text-red-500">*</span>{" "}
-                    </label>
-                    <input {...register("sortOrder")} className="input-style" />
-                    <span className="text-[0.8rem] font-medium text-destructive">
-                      {errors.sortOrder?.message && (
-                        <span>{errors.sortOrder?.message}</span>
-                      )}
-                    </span>
-                  </div>
-                </div>
+              {/* Name */}
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-700">
+                  Name<span className="text-red-500">*</span>
+                </label>
+                <input
+                  {...register("name")}
+                  className="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-500 outline-none text-gray-800"
+                />
+                {errors.name && (
+                  <p className="text-[0.8rem] text-red-500">
+                    {errors.name.message}
+                  </p>
+                )}
               </div>
 
-             
+              {/* Sort Order */}
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-700">
+                  Sort Order<span className="text-red-500">*</span>
+                </label>
+                <input
+                  {...register("sortOrder")}
+                  className="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-500 outline-none text-gray-800"
+                />
+                {errors.sortOrder && (
+                  <p className="text-[0.8rem] text-red-500">
+                    {errors.sortOrder.message}
+                  </p>
+                )}
+              </div>
             </div>
-            {/* End of left box */}
-            <input {...register("oldImgageUrl")} hidden />
-            <div className="flex-1 flex flex-col gap-5 h-full">
-              <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border">
-                <h1 className="font-semibold">Pictures</h1>
-                <div className="flex flex-col gap-1">
-                  <label className="label-style"> Image</label>
-                  <input
-                    {...register("image", { required: true })}
-                    type="file"
-                    className="input-image-style"
-                  />
+          </div>
 
-                  <div className="text-[0.8rem] font-medium text-destructive">
-                    {errors.image && <span>Select category image</span>}
-                  </div>
-                </div>
+          {/* Right Section */}
+          <div className="flex-1 flex flex-col gap-5">
+            {/* Image Upload */}
+            <div className="bg-white border rounded-2xl shadow-sm p-4 sm:p-6 space-y-3">
+              <h2 className="text-lg font-semibold text-gray-700">Picture</h2>
+              <input {...register("oldImgageUrl")} hidden />
+
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-700">
+                  Image<span className="text-red-500">*</span>
+                </label>
+                <input
+                  {...register("image", { required: true })}
+                  type="file"
+                  className="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+                {errors.image && (
+                  <p className="text-[0.8rem] text-red-500">
+                    Select category image
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* General Detail */}
+            <div className="bg-white border rounded-2xl shadow-sm p-4 sm:p-6 space-y-4">
+              <h2 className="text-lg font-semibold text-gray-700">
+                General Details
+              </h2>
+
+              {/* Description */}
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-700">
+                  Description
+                </label>
+                <textarea
+                  {...register("desc")}
+                  className="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-500 outline-none h-24 resize-none text-gray-800"
+                />
+                {errors.desc && (
+                  <p className="text-[0.8rem] text-red-500">
+                    Category description is required
+                  </p>
+                )}
               </div>
 
-              <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border">
-                <h1 className="font-semibold">General Detail</h1>
-
-                <div className="flex flex-col gap-1">
-                  <label className="label-style">Category description</label>
-
-                  <textarea
-                    {...register(
-                      "desc"
-                      //   , {
-                      //   validate: {
-                      //     pattern: (value: string) => !/[!]/.test(value),
-                      //   },
-                      // }
-                    )}
-                    className="textarea-style"
-                  />
-                  <div className="text-[0.8rem] font-medium text-destructive">
-                    {errors.desc && (
-                      <span>Category description is required</span>
-                    )}
-                  </div>
-                </div>
-
-                
-
-
-
-                <div className="flex flex-col gap-1 w-full">
-                    <label className="label-style" htmlFor="product-title">
-                      Active<span className="text-red-500">*</span>{" "}
-                    </label>
-                    <select {...register("isFeatured")} className="input-style">
-                      <option key="key1" value="yes">
-                        Yes
-                      </option>
-                      <option key="key2" value="no">
-                        No
-                      </option>
-                     
-                    </select>
-                    <span className="text-[0.8rem] font-medium text-destructive">
-                      {errors.isFeatured?.message && (
-                        <p>{errors.isFeatured?.message}</p>
-                      )}
-                    </span>
-                  </div>
-
-
-
-                <Button
-                  className="bg-amber-500 text-amber-900 font-bold"
-                  type="submit"
+              {/* Active */}
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-700">
+                  Active<span className="text-red-500">*</span>
+                </label>
+                <select
+                  {...register("isFeatured")}
+                  className="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-500 outline-none text-gray-800"
                 >
-                  Save
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+                {errors.isFeatured && (
+                  <p className="text-[0.8rem] text-red-500">
+                    {errors.isFeatured.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Submit Button */}
+              <div className="pt-3">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`btn-save w-full ${isSubmitting ? "opacity-80" : ""}`}
+                >
+                  {isSubmitting ? "Saving..." : "Save"}
                 </Button>
               </div>
             </div>
           </div>
         </div>
-      </form>
-    </>
+      </div>
+    </form>
   );
 };
 
