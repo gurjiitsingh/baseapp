@@ -3,7 +3,6 @@
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-
 import { useEffect } from "react";
 import ContactInfo from "@/custom/cus-components/ContactInfo";
 import QuoteBanner from "@/custom/cus-components/QuoteBanner";
@@ -32,32 +31,32 @@ export default function Page() {
       {/* <FlavorLine /> */}
       {/* <HeroSection /> */}
       <HeroSectionCustom />
-       {/* <DiscountSectionSingle /> */}
-      <DiscountSection />
-      <WelcomeBanner />
-     <BestOfMonth />
-     <div className="max-w-7xl flex flex-col mx-auto  md:flex-row gap-4">
-      <div className="max-w-full mx-2 md:mx-0 md:w-[60%]">
-     <LunchDiscountCard />
-     </div>
-     <div className="max-w-full mx-2 md:mx-0 md:w-[40%]">
-     <TableReservationCard />
-     </div>
-     </div>
-          <SlidersByCatId />
+      {/* <DiscountSectionSingle /> */}
+      {/* <DiscountSection /> */}
+      {/* <WelcomeBanner /> */}
+      <BestOfMonth />
+      {/* <div className="max-w-7xl flex flex-col mx-auto  md:flex-row gap-4">
+        <div className="max-w-full mx-2 md:mx-0 md:w-[60%]">
+          <LunchDiscountCard />
+        </div>
+        <div className="max-w-full mx-2 md:mx-0 md:w-[40%]">
+          <TableReservationCard />
+        </div>
+      </div> */}
+      <SlidersByCatId />
 
       {/* <SpecialRecommendations /> */}
       {/* <About /> */}
       {/* <MasalaFlyer /> */}
-      <BuffetCard />
+      {/* <BuffetCard /> */}
       {/* <FlyerBuffet /> */}
 
-      <QuoteBanner />
-      <Catering />
+      {/* <QuoteBanner />
+      <Catering /> */}
       <ContactInfo />
       {/* <MenuPreview /> */}
-      {/* <Contact />
-      <Footer /> */}
+      {/* <Contact />*/}
+    
     </main>
   );
 }

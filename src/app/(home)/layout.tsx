@@ -61,7 +61,7 @@ export default function RootLayout({
 
                 {children}
 
-               {/* <Footer /> */}
+               <Footer />
 
                 {/* Client-side CartBottom wrapper component */}
                 <CartBottomWrapper /> {/* Conditionally rendered based on environment variable */}

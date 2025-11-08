@@ -6,23 +6,23 @@ import { FaMapMarkedAlt, FaPhoneAlt, FaEnvelope, FaCalendarAlt } from "react-ico
 
 export default function ContactInfo() {
   return (
-    <section className="bg-[#f4efdf] text-[#2b2e4a] py-16 md:py-36 px-6">
+    <section className="bg-[#fdf4ec] text-[#2b2e4a] py-16 md:py-36 px-6">
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 text-center">
         {/* Standort */}
         <div>
           <FaMapMarkedAlt className="w-8 h-8 mx-auto mb-4 text-[#2b2e4a]" />
-          <h3 className="uppercase text-sm tracking-wider font-semibold mb-2">Standort</h3>
+          <h3 className="uppercase text-sm tracking-wider font-semibold mb-2">Location</h3>
           
-          <p className="text-sm">Braunschweiger Str.</p>
-            <p className="text-sm">Braunschweiger Str. 93,</p>
-            <p className="text-sm">38518 Gifhorn, Germany</p>
+          <p className="text-sm">82-84 Standard Avenue.</p>
+            <p className="text-sm">Coventry ,</p>
+            <p className="text-sm">United Kingdom</p>
         </div>
 
         {/* Telefon */}
         <div>
           <FaPhoneAlt className="w-8 h-8 mx-auto mb-4 text-[#2b2e4a]" />
-          <h3 className="uppercase text-sm tracking-wider font-semibold mb-2">Telefon</h3>
-          <p className="text-sm"> 05371 6266291</p>
+          <h3 className="uppercase text-sm tracking-wider font-semibold mb-2">Phone</h3>
+          <p className="text-sm"> +44 7777 369496</p>
         </div>
 
         {/* E-Mail */}
@@ -30,20 +30,21 @@ export default function ContactInfo() {
           <FaEnvelope className="w-8 h-8 mx-auto mb-4 text-[#2b2e4a]" />
           <h3 className="uppercase text-sm tracking-wider font-semibold mb-2">E-Mail</h3>
           <a href="mailto:info@lakeside-ellerau.de" className="text-sm hover:underline">
-            info@masala-gf.de
+            info@anjanabhog.com
           </a>
         </div>
 
         {/* Öffnungszeiten */}
          <div>
           <FaCalendarAlt className="w-8 h-8 mx-auto mb-4 text-[#2b2e4a]" />
-          <h3 className="uppercase text-sm tracking-wider font-semibold mb-2">Öffnungszeiten</h3>
-          <div className="text-sm space-y-1">
-            <p>Montag: Ruhetag</p>
-            <p>Dienstag bis Freitag:<br />12 bis 22 Uhr</p>
-            <p>Samstag: 16 - 22 Uhr</p>
-            <p>Sonntag: 12 bis 21 Uhr</p>
-          </div>
+        <h3 className="uppercase text-sm tracking-wider font-semibold mb-2">Opening Hours</h3>
+<div className="text-sm space-y-1">
+  <p>Six day weak</p>
+  {/* <p>Sunday: Closed</p>
+  <p>Tuesday to Friday:<br />12 PM to 10 PM</p>
+  <p>Saturday: 4 PM – 10 PM</p>
+  <p>Sunday: 12 PM – 9 PM</p> */}
+</div>
         </div>
       </div>
     </section>

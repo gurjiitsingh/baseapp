@@ -2,12 +2,17 @@
 
 import Image from "next/image";
 import { FaThumbsUp, FaShieldAlt, FaSmile } from "react-icons/fa";
-import { Chicle, Ultra, Lobster } from "next/font/google";
+import { Chicle, Ultra, Lobster, Lato } from "next/font/google";
 import Link from "next/link";
 
 const chicle = Lobster({
   subsets: ["latin"],
   weight: "400",
+});
+
+const lato = Lato({
+  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export default function HeroSectionCustom() {
@@ -41,13 +46,17 @@ export default function HeroSectionCustom() {
         </div> */}
 
         {/* Curved white bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-white rounded-t-[50%]" />
+        <div className="absolute bottom-0 left-0 right-0 h-10  rounded-t-[50%]" />
       </div>
 
       {/* Text + Buttons Section (below image on mobile, overlay on desktop) */}
       <div className="relative bg-white md:bg-transparent md:absolute md:inset-0 md:flex md:items-center md:px-20 md:justify-start mt-0 md:mt-0">
         <div className="w-full flex justify-center md:justify-end">
           <div className="text-[#2b2b2b] md:text-white max-w-2xl px-6 pb-6  mt-[-60px] md:mt-0 md:p-0  text-left md:text-left">
+            {/* Tagline */}
+      <p className="text-[#ff7519] md:text-white text-lg font-semibold uppercase tracking-wide">
+        Crafting Traditions in Every Bite
+      </p>
             {/* Title */}
             <h2
               className={`${chicle.className} text-6xl md:text-[90px] my-3 text-black md:text-black`}
@@ -59,20 +68,21 @@ export default function HeroSectionCustom() {
             <ul className="space-y-2 text-base text-[12px] text-center md:text-left">
               <li className="flex items-center justify-center md:justify-start gap-2 text-[#c36b1e]  md:text-white">
                 <FaThumbsUp className="text-[#c36b1e]  md:text-white   " />
-                Keine Plattformgebühren
+              100% Freshly Made Every Day
               </li>
               <li className="flex items-center justify-center md:justify-start gap-2 text-center md:text-left text-[#c36b1e]  md:text-white">
                 <FaShieldAlt className="text-[#c36b1e]  md:text-white  " />
-                Keine Zahlungsgebühren
+                Pure Ingredients · 
+                {/* No Preservatives */}
               </li>
               <li className="flex items-center justify-center md:justify-start gap-2 text-center md:text-left text-[#c36b1e]  md:text-white">
                 <FaSmile className="text-[#c36b1e]  md:text-white  " />
-                1135{" "}
+               Loved by{" "}  
                 <a
                   href="#"
                   className="underline text-[#c36b1e]  md:text-white hover:text-green-400 "
                 >
-                   Empfehlungen von Gästen
+                   1000+ Happy Customers
                 </a>
               </li>
             </ul>
@@ -80,23 +90,23 @@ export default function HeroSectionCustom() {
             {/* Buttons */}
             <div className="flex flex-col md:flex-row justify-start gap-4 pt-4">
               <Link
-                href="https://eat.allo.restaurant/restaurant/masala-taste-of-india"
+                href=""
                 rel="noopener noreferrer"
                 data-aos="fade-left"
-                className={`${chicle.className}  bg-[#7a1f1f] hover:bg-[#611616] text-2xl text-white font-semibold px-6 py-1 rounded-xl transition text-center tracking-wide`}
+                className={`${lato.className}  bg-[#ff7519] hover:bg-[#611616] text-2xl text-white font-semibold px-6 py-1 rounded-xl transition text-center tracking-wide`}
                
             
               >
-                🍴 ORDER MENU
+                  ORDER SWEETS
               </Link>
 
               <Link
                 href="/#bf"
                 rel="noopener noreferrer"
-                className={`${chicle.className}  bg-white text-[#7a1f1f] text-2xl font-bold px-6 py-1 rounded-xl border-1 border-[#7a1f1f] hover:bg-[#7a1f1f] hover:text-white transition text-center`}
+                className={`${lato.className}  bg-white text-[#ff7519] text-2xl font-bold px-6 py-1 rounded-xl border-1 border-[#ff7519] hover:bg-[#7a1f1f] hover:text-white transition text-center`}
                
               >
-                Buffet
+                CONTACT US
               </Link>
             </div>
           </div>

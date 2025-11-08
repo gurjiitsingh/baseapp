@@ -50,16 +50,27 @@ export default function HeroSectionCustom() {
       </div>
 
       {/* Text + Buttons Section (below image on mobile, overlay on desktop) */}
-      <div className="relative bg-white md:bg-transparent md:absolute md:inset-0 md:flex md:items-center md:px-20 md:justify-start mt-0 md:mt-0">
-   <div className="relative bg-white md:bg-transparent md:absolute md:inset-0 md:flex md:items-center md:px-20 md:justify-start mt-0 md:mt-0">
+  <div className="relative bg-white md:bg-transparent md:absolute md:inset-0 md:flex md:items-center md:px-20 md:justify-start mt-0 md:mt-0">
   <div className="w-full flex justify-center md:justify-end">
     <div className="text-[#2b2b2b] md:text-white max-w-2xl px-6 pb-6 mt-[-60px] md:mt-0 md:p-0 text-left md:text-left">
+      
+      {/* Tagline */}
+      <p className="text-[#ff7519] md:text-white text-lg font-semibold uppercase tracking-wide">
+        Crafting Traditions in Every Bite
+      </p>
+
       {/* Title */}
       <h2
         className={`${chicle.className} text-6xl md:text-[90px] my-3 text-black md:text-black`}
       >
         Anjana Bhog Sweets
       </h2>
+
+      {/* Subtitle */}
+      <p className="text-[16px] md:text-lg text-[#555] md:text-white mb-4">
+        From the heart of our kitchen to your celebrations — taste the purity,
+        freshness, and love in every sweet we make.
+      </p>
 
       {/* Features */}
       <ul className="space-y-2 text-base text-[12px] text-center md:text-left">
@@ -84,7 +95,7 @@ export default function HeroSectionCustom() {
       </ul>
 
       {/* Buttons */}
-      <div className="flex flex-col md:flex-row justify-start gap-4 pt-4">
+      <div className="flex flex-col md:flex-row justify-start gap-4 pt-6">
         <Link
           href="/menu"
           rel="noopener noreferrer"
@@ -105,7 +116,8 @@ export default function HeroSectionCustom() {
     </div>
   </div>
 </div>
-      </div>
+
+
     </section>
   );
 }

@@ -1,7 +1,7 @@
 export const SEO = {
-  title: "Masala – Indian Restaurant in Gifhorn, Lower Saxony",
+  title: "Anjana Bhog, 82-84 Standard Avenue, Coventry, United Kingdom",
   description:
-    "Authentic Indian food at Masala Gifhorn. Order online for delivery or visit us in Lower Saxony.",
+    "Authentic  Sweets at Anjana Bhog. Order online for delivery or visit us in Standard Avenue, Coventry, United Kingdom.",
 };
 
 
@@ -11,15 +11,15 @@ export const BRANDING = {
   offer_instruction: "",
   delivery_note: "Delivery is also available.",
   home_page_disclaimer:"",// "Food may differ from image.",
-  brand: "Masala",
-  tag_line: "Taste of India",
-  brand_name: "Masala Taste of India",
+  brand: "Anjana Bhog",
+  tag_line: "Anjana Bhog",
+  brand_name: "Anjana Bhog",
    poweredBy: "Powered by",
     poweredByUrl: "http://www.gstadeveloper.com",
     copyright: {
       prefix: "Copyright ©",
       suffix: "All Rights Reserved by",
-      company: "Masala Taste of India"
+      company: "Anjana Bhog"
     },
 
 
@@ -30,7 +30,7 @@ export const BRANDING = {
   copyright: {
     prefix: "Copyright ©",
     suffix: "All Rights Reserved by",
-    company: "Masala Taste of India",
+    company: "Anjana Bhog",
   },
 },
 
@@ -38,8 +38,8 @@ export const BRANDING = {
 // Order complete
 
   order_complete_heading: "Your order is complete",
-  pickup_time: "Pickup: 20–25 minutes",
-  delivery_time: "Delivery time: 40–55 minutes",
+  pickup_time: "",
+  delivery_time: "",
 
 
   //admin sidebar
@@ -68,14 +68,14 @@ export const BRANDING = {
     { name: "Home", link: "/" },
     { name: "About Us", link: "/about" },
     { name: "Contact", link: "/contact" },
-    { name: "Table Reservation", link: "/reservation" },
+    // { name: "Table Reservation", link: "/reservation" },
   ],
 
   menu: [
     { name: "Home", link: "/" },
     { name: "About Us", link: "/about" },
     { name: "Contact", link: "/contact" },
-    { name: "Table Reservation", link: "/reservation" },
+    // { name: "Table Reservation", link: "/reservation" },
   ],
 
   sections: {
@@ -86,8 +86,8 @@ export const BRANDING = {
         { name: "Menu", href: "/" },
         { name: "About", href: "/about" },
         { name: "Contact", href: "/contact" },
-        { name: "Reservation", href: "/reservation" },
-        { name: "Allergens", href: "/allergene" },
+        // { name: "Reservation", href: "/reservation" },
+        // { name: "Allergens", href: "/allergene" },
       ],
     },
     company: {

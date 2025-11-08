@@ -59,17 +59,17 @@ export default function Footer() {
         title: BRANDING?.sections?.links?.title || "Links",
         items: BRANDING?.sections?.links?.items || [
           { name: "Home", href: "/" },
-          { name: "Menu", href: "/menu" },
-          { name: "About Us", href: "/about" },
-          { name: "Contact", href: "/contact" },
-          { name: "Table Reservation", href: "/reservation" },
-          { name: "Allergens", href: "/allergene" },
+          { name: "Menu", href: "/" },
+          { name: "About Us", href: "/" },
+          { name: "Contact", href: "/" },
+          // { name: "Table Reservation", href: "/reservation" },
+          // { name: "Allergens", href: "/allergene" },
         ],
       },
       company: {
         title: BRANDING?.sections?.company?.title || "Company",
         items: BRANDING?.sections?.company?.items || [
-          { name: "Privacy Policy", href: "/privacy" },
+          { name: "Privacy Policy", href: "/" },
           { name: "Terms of Service", href: "#" },
         ],
       },
@@ -80,7 +80,7 @@ export default function Footer() {
   };
 // 2B2E4A     navi dark color   d24a0f  orange
   return (
-    <footer className="relative pt-12 -mb-20 bg-[#d24a0f] text-white">
+    <footer className="relative pt-12 -mb-20 bg-[#ff7519] text-white">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-1">
           {/* Logo + Brand */}
@@ -90,7 +90,7 @@ export default function Footer() {
                 <Link href="/">
                   <img
                     className="h-24 md:h-24"
-                    src="/logo.webp"
+                    src="/logo-.webp"
                     alt={fallbackText.logo_alt}
                   />
                 </Link>
